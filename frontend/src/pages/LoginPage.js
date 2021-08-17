@@ -15,10 +15,11 @@ const LoginPage = ({ history }) => {
     axios
       .post("http://localhost:5000/login", body)
       .then((res) => {
-        console.log(res.data.result);
+        console.log(res.data);
         if (res.data.result === "success") {
           history.push("/");
-        } else return;
+          alert("로그인에 성공하였습니다.")
+        } else return alert("아이디 또는 비밀번호를 확인하세요");
       })
     // .then(json => console.log(json))
   };
