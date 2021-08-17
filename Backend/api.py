@@ -8,15 +8,34 @@ board = Blueprint('board', __name__)
 CORS(board)
 bcrypt = Bcrypt()
 
+@board.route("/login", methods=['GET', 'POST'])
+def login():
+    if session.get('login') is None:
+        data = request.json
 
-@board.route("/register", methods=["POST"])
+        userid = data['userId']
+        password = data['password']
+        user = User.query.filter(User.userid == userid).first()
+        if user is not None:
+            if bcrypt.check_password_hash(user.password, password):
+                session['login'] = user.id
+                return jsonify({"result": "success"})
+            else:
+                return jsonify({"result": "fail"})
+        else:
+            return jsonify({"result": "fail"})
+    else:
+        return jsonify({"result": "success"})
+
+
+@board.route("/register", methods=['GET', "POST"])
 def register():
     data = request.json
 
     id = data["id"]
     user_info = User.query.filter(User.userid == id).first()
     if user_info:
-        return Response("이미 존재하는 Username입니다", status=400)
+        return jsonify({"result": "fail"})
     password = data["password"]
     username = data["username"]
     pw_hash = bcrypt.generate_password_hash(password).decode()
@@ -25,6 +44,6 @@ def register():
     db.session.add(user)
     db.session.commit()
     
-    return redirect("/")
+    return jsonify({"result": "success"})
 
         

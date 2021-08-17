@@ -70,20 +70,24 @@ const RegisterPage = (props) => {
       return setPasswordError(true);
     }
     if (!usernameCheck) return;
-    console.log({ id, username, password });
-    let body = {
+
+    const body = {
       username,
       id,
       password,
     };
-    
+    console.log(body);
     axios
       .post(`http://localhost:5000/register`, body)
-      .then((res) => res.json())
-      .catch((e) => { return; })
-      
-      history.push('/login')
-  };
+      .then((res) => {
+        console.log(res);
+        if (res.data.result === "fail") {
+          setIdValidate(false)
+        } else
+          {alert("회원 가입에 성공하셨습니다.");
+        history.push('/login');}
+      })
+  }
 
   return (
     <div>
@@ -99,6 +103,9 @@ const RegisterPage = (props) => {
           />
           {!idCheck && (
             <div style={{ color: "red" }}>ID 형식이 유효하지 않습니다.</div>
+          )}
+          {!idValidate && (
+            <div style={{ color: "red" }}>중복된 아이디가 존재합니다.</div>
           )}
         </div>
         <div>
