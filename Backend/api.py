@@ -3,14 +3,19 @@ from models import User
 from db_connect import db
 from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from datetime import datetime, timedelta
+import jwt
 
 board = Blueprint('board', __name__)
 CORS(board)
 bcrypt = Bcrypt()
 
+encryption_secret = "secret_nyeol"
+algorithm ='HS256'
+
 @board.route("/login", methods=['GET', 'POST'])
 def login():
-    if session.get('login') is None:
+    if request.method == 'POST':
         data = request.json
 
         userid = data['userId']
@@ -18,15 +23,15 @@ def login():
         user = User.query.filter(User.userid == userid).first()
         if user is not None:
             if bcrypt.check_password_hash(user.password, password):
-                session['login'] = user.id
-                return jsonify({"result": "success", "userid": user.id, "username":user.username})
+                data_to_encode = {"id" : userid, "password" : password, 'exp': datetime.utcnow() + timedelta(seconds=60)}
+                jwt_token = jwt.encode(data_to_encode, encryption_secret, algorithm)
+                return jsonify(result="success", data={'token': jwt_token})
             else:
                 return jsonify({"result": "fail"})
         else:
             return jsonify({"result": "fail"})
     else:
         return jsonify({"result": "success"})
-
 
 @board.route("/register", methods=['GET', "POST"])
 def register():

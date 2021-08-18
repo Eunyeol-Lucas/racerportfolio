@@ -1,9 +1,13 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const LoginPage = ({ history }) => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    localStorage.getItem("users") && <div>이미 로그인 하셨습니다.</div>
+  }, [] )
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,8 +19,10 @@ const LoginPage = ({ history }) => {
     axios
       .post("http://localhost:5000/login", body)
       .then((res) => {
-        console.log(res.data);
+        
         if (res.data.result === "success") {
+           const { token } = res.data.data;
+          localStorage.setItem("users", token)
           history.push("/");
           alert("로그인에 성공하였습니다.")
         } else return alert("아이디 또는 비밀번호를 확인하세요");
@@ -25,14 +31,14 @@ const LoginPage = ({ history }) => {
   };
 
   return (
-    <div>
+      <div>
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="userId"></label>
           아이디
           <input
             placeholder="ID를 입력하세요"
-            type='text'
+            type="text"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
           />
