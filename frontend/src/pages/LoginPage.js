@@ -6,8 +6,8 @@ const LoginPage = ({ history }) => {
   const [password, setPassword] = useState("");
 
   useEffect(() => {
-    localStorage.getItem("users") && <div>이미 로그인 하셨습니다.</div>
-  }, [] )
+    localStorage.getItem("users") && <div>이미 로그인 하셨습니다.</div>;
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,44 +16,46 @@ const LoginPage = ({ history }) => {
       userId,
       password,
     };
-    axios
-      .post("http://localhost:5000/login", body)
-      .then((res) => {
-        
-        if (res.data.result === "success") {
-           const { token } = res.data.data;
-          localStorage.setItem("users", token)
-          history.push("/");
-          alert("로그인에 성공하였습니다.")
-        } else return alert("아이디 또는 비밀번호를 확인하세요");
-      })
+    axios.post("http://localhost:5000/login", body).then((res) => {
+      if (res.data.result === "success") {
+        const { token } = res.data.data;
+        console.log("token", res.data);
+        localStorage.setItem("users", JSON.stringify(res.data.data));
+        history.push("/");
+        alert("로그인에 성공하였습니다.");
+      } else return alert("아이디 또는 비밀번호를 확인하세요");
+    });
     // .then(json => console.log(json))
   };
 
   return (
-      <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="userId"></label>
-          아이디
-          <input
-            placeholder="ID를 입력하세요"
-            type="text"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-          />
-        </div>
-        <div>
-          <label htmlFor="password">비밀번호 </label>
-          <input
-            placeholder="비밀번호를 입력하세요"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">로그인</button>
-      </form>
+    <div>
+      {window.localStorage.getItem("users") ? (
+        <div>환영합니다.</div>
+      ) : (
+        <form form onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="userId"></label>
+            아이디
+            <input
+              placeholder="ID를 입력하세요"
+              type="text"
+              value={userId}
+              onChange={(e) => setUserId(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="password">비밀번호 </label>
+            <input
+              placeholder="비밀번호를 입력하세요"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+          <button type="submit">로그인</button>
+        </form>
+      )}
     </div>
   );
 };
