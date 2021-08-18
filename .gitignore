@@ -27,8 +27,8 @@ yarn-error.log*
 ############
 
 # Virtual Environment
-/venv
+venv/
 
 # bin files
-/__pycache__/
-/migrations
+__pycache__/
+migrations/
