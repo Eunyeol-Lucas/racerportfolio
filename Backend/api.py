@@ -5,51 +5,33 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from datetime import datetime, timedelta
 from functools import wraps
-import jwt
+from flask_jwt_extended import *
 
 board = Blueprint('board', __name__)
 CORS(board)
+
 bcrypt = Bcrypt()
-
-encryption_secret = "secret_nyeol"
-algorithm ='HS256'
-
-
-def login_required(f):      									
-    @wraps(f)                   								
-    def decorated_function(*args, **kwargs):					
-        access_token = request.headers.get('Authorization') 
-        if access_token is not None:  							
-            try:
-                payload = jwt.decode(access_token, encryption_secret, algorithms=[algorithm]) 				   
-            except jwt.InvalidTokenError:
-                 payload = None     					
-
-            if payload is None: return Response(status=401)  	
-
-            userid   = payload['userid']  					
-            g.user_id = userid
-            g.user    = User.query.filter(User.userid == userid).first() if userid else None
-        else:
-            return Response(status = 401)  					
-
-        return f(*args, **kwargs)
-    return decorated_function
 
 
 @board.route("/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         data = request.json
-
+        
         userid = data['userId']
         password = data['password']
         user = User.query.filter(User.userid == userid).first()
+        user_id = user.id
         if user is not None:
             if bcrypt.check_password_hash(user.password, password):
-                payload = {"id" :userid, 'exp': datetime.utcnow() + timedelta(seconds=60)}
-                jwt_token = jwt.encode(payload, encryption_secret, algorithm)
-                return jsonify(result="success", data={'token': jwt_token})
+
+                session.clear()
+                session['user_id'] = user_id
+                return jsonify(
+			        result = "success",
+			        token = {"userid": user_id, "access_token": create_access_token(identity = user_id, expires_delta = False)
+                    })
+                 
             else:
                 return jsonify({"result": "fail"})
         else:
@@ -76,9 +58,35 @@ def register():
     return jsonify({"result": "success"})
 
 
-@board.route('/main', methods=['GET'])
-@login_required
-def mainpage():
+@board.route('/user', methods=["GET", "POST"])
+@jwt_required()
+def user_only():
+    cur_user = get_jwt_identity()
+    if cur_user is None:
+        return jsonify({"result": "bad"})
+    else:
+        return jsonify(cur_user)
 
-    return jsonify({"result": "good"})
-        
+@board.route('/main', methods=["POST"])
+@jwt_required()
+def mainpage():
+    try: 
+        data = request.get_json()
+        id = data["userid"]
+        user = User.query.filter(User.id==id).first()
+        if user:
+            profile_user =  Profile.query.filter(Profile.user_id==id).first()
+            if profile_user is None:
+                profile_user =  Profile(user_id=id)
+                db.session.add(profile_user)
+                db.session.commit()
+                return jsonify({"result": "success"})  
+            else:
+                return jsonify({"result": "already" })
+        else:
+            return jsonify({"result": "AGAIN"})  
+    except:
+        return jsonify({"result": "wrong"})    
+
+
+
