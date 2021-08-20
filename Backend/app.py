@@ -1,21 +1,30 @@
-from flask import Flask
+from flask import Flask, request, jsonify
 from db_connect import db
 from flask_migrate import Migrate
 from models import *
 from api import board
+from flask_bcrypt import Bcrypt
 from flask_cors import CORS
+from flask_jwt_extended import *
 
+bcrypt = Bcrypt()
 
 app = Flask(__name__)
 app.register_blueprint(board)
-# cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
+jwt = JWTManager(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:dkssud@127.0.0.1:3306/racer_portfolio"
+CORS(app)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:dkssud@127.0.0.1:3306/racer-portfolio"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'asdasdasdasd'
 
+app.config.update(
+			DEBUG = True,
+			JWT_SECRET_KEY = "I'm your nyeol"
+		)
 
-
+        
 db.init_app(app)
 migrate = Migrate(app, db)
 
