@@ -1,19 +1,21 @@
-from flask import Flask, request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint
 from models import Education
 from db_connect import db
 from flask_jwt_extended import *
 
 edu = Blueprint('edu', __name__)
-
-@edu.route('/edu', methods="GET, POST, PATCH, DELETE")
+# 학력 사항
+@edu.route('/edu', methods=['GET', "POST", "PATCH", "DELETE"])
 @jwt_required()
 def education():
+    user_id = get_jwt_identity()
     # 메인페이지에 접속할 경우 저장된 education 정보를 요청
     if request.method == "GET":
         try:
-            user_education = Education.query.filter(Education.user_id == get_jwt_identity()).first()
+            user_education = Education.query.filter(Education.user_id == user_id).all()
             education_list = [
                 {
+                    'id': education.id,
                     'name': education.name,
                     'major': education.major,
                     'status': education.status
@@ -26,14 +28,14 @@ def education():
     # 1개 이상의 education 정보 data를 Education db에 저장 요청
     if request.method == "POST":
         data = request.json
-        
-        for datum in data:
+
+        for datum in data["education_list"]:
             school = datum['school']
             major = datum['major']
             status = datum['status']
         try:
             education_list = Education(
-                user_id = get_jwt_identity(),
+                user_id = user_id,
                 school = school,
                 major = major,
                 status = status
@@ -68,7 +70,6 @@ def education():
             db.session.rollback()
 
             return jsonify({'error': str(e)})
-        pass
     # education data 삭제 요청
     if request.method == "DELETE":
         data = request.json

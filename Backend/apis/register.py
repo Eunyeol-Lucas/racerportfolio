@@ -1,10 +1,11 @@
-from flask import Flask, request, Blueprint, jsonify
+from flask import request, Blueprint, jsonify
 from flask_bcrypt import Bcrypt
 from models import *
 
 reg = Blueprint('reg', __name__)
 bcrypt = Bcrypt()
 
+# 회원가입 
 @reg.route("/register", methods=['GET', "POST"])
 def register():
     data = request.json

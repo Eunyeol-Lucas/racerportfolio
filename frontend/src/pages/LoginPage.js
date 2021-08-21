@@ -29,7 +29,7 @@ const LoginPage = ({ history }) => {
 
   return (
     <div>
-      {window.localStorage.getItem("token") ? (
+      {window.localStorage.getItem("access_token") ? (
         <div>환영합니다.</div>
       ) : (
         <form form onSubmit={handleSubmit}>

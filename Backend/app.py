@@ -6,7 +6,7 @@ from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_jwt_extended import *
 from datetime import timedelta
-from apis import profile, register, login
+from apis import profile, register, login, education, certificates, awards, projects
 
 bcrypt = Bcrypt()
 
@@ -14,6 +14,11 @@ app = Flask(__name__)
 app.register_blueprint(profile.prop)
 app.register_blueprint(register.reg)
 app.register_blueprint(login.log)
+app.register_blueprint(education.edu)
+app.register_blueprint(certificates.certify)
+app.register_blueprint(awards.award)
+app.register_blueprint(projects.project)
+
 jwt = JWTManager(app)
 
 CORS(app)

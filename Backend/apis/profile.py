@@ -1,6 +1,6 @@
 from flask_restful import Resource, reqparse
 from flask import session, jsonify, Blueprint, request
-from models import Profile
+from models import Profile, User
 from db_connect import db
 from flask_jwt_extended import *
 
@@ -10,28 +10,32 @@ prop = Blueprint('prop', __name__)
 @prop.route('/profile', methods=["GET", "POST", "PATCH"])
 @jwt_required()
 def profile():
+    user_id = get_jwt_identity()
     if request.method == "GET":
         try:
-            user_profile = Profile.query.filter(Profile.user_id == get_jwt_identity()).first()
+            user_profile = Profile.query.filter(Profile.user_id == user_id).first()
+            user_name = User.query.filter(User.user_id == user_id).first().username
             user_profile_info = {
                 'image': user_profile.image,
-                'introduction': user_profile.introduction
+                'introduction': user_profile.introduction,
+                'name': user_name
             }
-            return jsonify(user_profile_info)
+            return jsonify(user_profile_info), 200
         
         except:
             return jsonify({"result": "fail"})
 
     if request.method =="POST":
         try:
-            data = request.json
-            image = data["image"]
-            introduction = data["introduction"]
+            data = request.files['file']
+            # return jsonify({"result":data})
+            # image = data["image"]
+            # introduction = data["introduction"]
 
             profile = Profile(
-                    user_id = get_jwt_identity(),
-                    image = image,
-                    introduction = introduction
+                    user_id = user_id,
+                    image = data,
+                    # introduction = introduction
                 )
             db.session.add(profile)
             db.session.commit()
@@ -43,7 +47,7 @@ def profile():
 
     if request.method == "PATCH":
         try:
-            user_profile = Profile.query.filter(Profile.user_id == get_jwt_identity()).first()
+            user_profile = Profile.query.filter(Profile.user_id == user_id).first()
             
             data = request.get_json()
             

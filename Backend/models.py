@@ -1,4 +1,3 @@
-from enum import unique
 from db_connect import db
 from datetime import datetime
 
@@ -19,7 +18,7 @@ class User(db.Model):
     educations = db.relationship("Education", backref="user", lazy=True)
     awards = db.relationship("Award", backref="user", lazy=True)
     projects = db.relationship("Project", backref="user", lazy=True)
-    certifications = db.relationship("Certification", backref="user", lazy=True)
+    certificates = db.relationship("Certification", backref="user", lazy=True)
 
 
 # 사용자 프로필
@@ -44,7 +43,7 @@ class Award(db.Model):
     __tablename__   = "awards"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    awards          = db.Column(db.String(255))
+    name          = db.Column(db.String(255))
     description     = db.Column(db.String(255))    
 
 # 사용자 프로젝트 내역
@@ -59,7 +58,7 @@ class Project(db.Model):
 
 # 사용자 자격 정보
 class Certification(db.Model):
-    __tablename__   = "certifications"
+    __tablename__   = "certificates"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name            = db.Column(db.String(100), nullable=False)
