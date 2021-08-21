@@ -3,10 +3,10 @@ import React from "react";
 export default function Home() {
   return (
     <>
-      {window.localStorage.getItem("token") && (
+      {window.localStorage.getItem("access_token") && (
         <button
           onClick={() => {
-            window.localStorage.removeItem("token");
+            window.localStorage.removeItem("access_token");
             window.location.href = "/login";
           }}
         >
