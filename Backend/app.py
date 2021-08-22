@@ -2,39 +2,34 @@ from flask import Flask, request, jsonify
 from db_connect import db
 from flask_migrate import Migrate
 from models import *
-from flask_bcrypt import Bcrypt
 from flask_cors import CORS
 from flask_jwt_extended import *
-from datetime import timedelta
-from apis import profile, register, login, education, certificates, awards, projects
+import config
 
-bcrypt = Bcrypt()
+def create_app():
+    app = Flask(__name__)
+    jwt = JWTManager(app)
+    CORS(app)
+    
+    app.config.from_object(config)
 
-app = Flask(__name__)
-app.register_blueprint(profile.prop)
-app.register_blueprint(register.reg)
-app.register_blueprint(login.log)
-app.register_blueprint(education.edu)
-app.register_blueprint(certificates.certify)
-app.register_blueprint(awards.award)
-app.register_blueprint(projects.project)
+    db.init_app(app)
+    Migrate().init_app(app, db)
 
-jwt = JWTManager(app)
+    
 
-CORS(app)
+    from apis import profile, register, login, education, certificates, awards, projects
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:dkssud@127.0.0.1:3306/racer-portfolio"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.secret_key = 'asdasdasdasd'
+    app.register_blueprint(profile.bp)
+    app.register_blueprint(register.bp)
+    app.register_blueprint(login.bp)
+    app.register_blueprint(education.bp)
+    app.register_blueprint(certificates.bp)
+    app.register_blueprint(awards.bp)
+    app.register_blueprint(projects.bp)
 
-app.config["JWT_SECRET_KEY"] = "super-secret"  # Change this!
-app.config["JWT_ACCESS_TOKEN_EXPIRES"] = timedelta(hours=1)
-app.config["JWT_REFRESH_TOKEN_EXPIRES"] = timedelta(days=30)
-
-        
-db.init_app(app)
-migrate = Migrate(app, db)
+    return app
 
 
 if __name__ == '__main__':
-    app.run('0.0.0.0', 5000, debug=True)
+    create_app().run('0.0.0.0', 5000, debug=True)
