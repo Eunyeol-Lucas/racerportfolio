@@ -16,15 +16,18 @@ const LoginPage = ({ history }) => {
       userId,
       password,
     };
-    axios.post("http://localhost:5000/login", body).then((res) => {
+    axios.post(`${process.env.REACT_APP_BASE_URL}/login`, body).then((res) => {
       console.log(res);
-      if (res.data.result === "success") {
+      if (res.status === 200) {
         console.log("access_token", res.data);
         localStorage.setItem("access_token", JSON.stringify(res.data.access_token));
         history.push("/");
         alert("로그인에 성공하였습니다.");
-      } else return alert("아이디 또는 비밀번호를 확인하세요");
-    });
+      }
+    }).catch((e => {
+      console.log(e.response);
+      alert("아이디 또는 비밀번호를 확인하세요");
+    }))
   };
 
   return (
