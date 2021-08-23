@@ -1,116 +1,88 @@
-from flask import Flask, request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, abort
 from models import Education
 from db_connect import db
 from flask_jwt_extended import *
 
-edu = Blueprint('edu', __name__)
-
-@edu.route('/edu', methods="GET, POST, PATCH, DELETE")
+bp = Blueprint('education', __name__)
+# 학력 사항
+@bp.route('/edu', methods = ['GET', 'POST', 'PATCH', 'DELETE'])
 @jwt_required()
-class education():
-    
-    pass
-
-'''
-class Education(Resource):
-    def get(self):
-        session['user_id'] = 'test2' # 테스트용 test
-        user_edu = Educations.query.filter(Educations.user_id == session['user_id']).all()
-
-        edu_list = [
-            {
-                'name': edu.name,
-                'major': edu.major,
-                'edu_status': edu.edu_status
-            } for edu in user_edu
-        ]
-
-        return jsonify(edu_list)
-
-    def post(self):
+def education():
+    user_id = get_jwt_identity()
+    # 메인페이지에 접속할 경우 저장된 education 정보를 요청
+    if request.method == 'GET':
         try:
-            parser = reqparse.RequestParser()
-            '''
-            받게 되는 데이터 형태
-            {
-                "edu_list": [
-                    {"name": "edu name 1", "major": "edu major 1", "edu_status": 1}, 
-                    {"name": "edu name 2", "major": "edu major 2", "edu_status": 2},
-                    {"name": "edu name 3", "major": "edu major 3", "edu_status": 3}
-                ]
-            }
-            '''
-            parser.add_argument('edu_list', type=list, required=True, location='json')
-
-            session['user_id'] = 'test2' # 테스트용 test
-            user_id = session['user_id']
-
-            args = parser.parse_args()
-            
-            for arg in args['edu_list']:
-                name = arg['name']
-                major = arg['major']
-                edu_status = arg['edu_status']
-
-                edu_list = Educations(
-                    user_id = user_id,
-                    name = name,
-                    major = major,
-                    edu_status = edu_status
-                )
-
-                db.session.add(edu_list)
-            
-            db.session.commit()
-
-            return jsonify({"result":"success"})
-            
+            user_education = Education.query.filter(Education.user_id == user_id).all()
+            education_list = [
+                {
+                    'id': education.id,
+                    'name': education.name,
+                    'major': education.major,
+                    'status': education.status
+                } for education in user_education
+            ]
+            return jsonify(education_list)
         except Exception as e:
             db.session.rollback()
-
             return jsonify({'error': str(e)})
+    # 1개 이상의 education 정보 data를 Education db에 저장 요청
+    if request.method == 'POST':
+        data = request.json
 
-    def patch(self):
+        for datum in data['education_list']:
+            school = datum['school']
+            major = datum['major']
+            status = datum['status']
+        
+            education_list = Education(
+                user_id = user_id,
+                school = school,
+                major = major,
+                status = status
+            )
+            db.session.add(education_list)
         try:
-            session['user_id'] = 'test2' # 테스트용 test
-
-            parser = reqparse.RequestParser()
-            parser.add_argument('edu_list', type=list, required=True, location='json')
-            args = parser.parse_args()
-
-            # id별로 돌면서 각 필드들을 update
-            for arg in args['edu_list']:
-                id = arg['id']
-                name = arg['name']
-                major = arg['major']
-                edu_status = arg['edu_status']
-                
-                user_edu = Educations.query.filter(Educations.id == id).first()
-                
-                user_edu.name = name
-                user_edu.major = major
-                user_edu.edu_status = edu_status
-            
             db.session.commit()
-
-            return jsonify({"result": "success"})
+            return jsonify({'result': 'success'})
+        
+        except Exception as e:
+            db.session.rollback()
+            abort(400,{'error': str(e)})
+            
+    # 데이터 수정 요청
+    if request.method == 'PATCH':
+        data = request.json
+        
+        for datum in data['education_list']:
+            education_id = datum['id']
+            school = datum['school']
+            major = datum['major']
+            status = datum['status']
+            
+            user_edu = Education.query.filter(Education.id == education_id).first()
+            
+            user_edu.school = school
+            user_edu.major = major
+            user_edu.edu_status = status
+        try:   
+            db.session.commit()
+            return jsonify({'result': 'success'})
 
         except Exception as e:
             db.session.rollback()
+            abort(400,{'error': str(e)})
 
-            return jsonify({'error': str(e)})
-
-    def delete(self, id):
+    # education data 삭제 요청
+    if request.method == 'DELETE':
+        data = request.json
         try:
-            user_edu = Educations.query.filter(Educations.id == id).first()
+            education_id = data['id']
+            user_education = Education.query.filter(Education.id == education_id).first()
 
-            db.session.delete(user_edu)
-            db.session.commit()
+            db.session.delete(user_education)
+            db.session.commit({'result': 'success'})
+            return jsonify()
 
-            return jsonify({"result": "success"})
         except Exception as e:
             db.session.rollback()
-            
-            return jsonify({'error': str(e)})
-
-'''
+            abort(400,{'error': str(e)})

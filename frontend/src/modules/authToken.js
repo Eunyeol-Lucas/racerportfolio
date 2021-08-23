@@ -4,6 +4,6 @@ import authHeader from "./authHeader";
 
 export default function tokenCheck() {
   axios
-    .post("http://localhost:5000/user","" ,{ headers: authHeader() })
+    .get(`${process.env.REACT_APP_BASE_URL}/user`,{ headers: authHeader() })
     .then((res) => console.log("auth", res));
 }

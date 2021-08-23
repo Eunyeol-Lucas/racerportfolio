@@ -1,68 +1,74 @@
-from flask_restful import Resource, reqparse
-from flask import session, jsonify, Blueprint, request
-from models import Profile
+from flask import session, jsonify, Blueprint, request, abort
+from werkzeug.utils import secure_filename
+from models import Profile, User
 from db_connect import db
 from flask_jwt_extended import *
 
 # 프로필
-prop = Blueprint('prop', __name__)
+bp = Blueprint('profile', __name__)
 
-@prop.route('/profile', methods=["GET", "POST", "PATCH"])
+@bp.route('/profile', methods = ['GET', 'POST', 'PATCH'])
 @jwt_required()
 def profile():
-    if request.method == "GET":
+    user_id = get_jwt_identity()
+    if request.method == 'GET':
         try:
-
-            user_profile = Profile.query.filter(Profile.user_id == session['login']).first()
-            user_profile_json = {
+            user_profile = Profile.query.filter(Profile.user_id == user_id).first()
+            user_name = User.query.filter(User.user_id == user_id).first().username
+            user_profile_info = {
                 'image': user_profile.image,
-                'introduction': user_profile.introduction
+                'introduction': user_profile.introduction,
+                'name': user_name
             }
-            return jsonify(user_profile_json)
+            return jsonify(user_profile_info)
         
         except:
-            return jsonify({"result": "fail"})
+            return jsonify({'result': 'fail'})
 
-    if request.method =="POST":
+    if request.method == 'POST':
+        data = request.files['file']
+        if not data:
+            abort(400, 'No data')
+
+        filename = secure_filename(data.filename)
+        mimetype = data.mimetype
+        img = Profile(profile_image=data.read(), mimetype=mimetype, name=filename, user_id=user_id)
+        db.session.add(img)
         try:
-            data = request.get_json()
-            id = data["login"]
-            
-            user_id = data["userid"]
-            image = data["image"]
-            introduction = data["introduction"]
-
-            profile = Profile(
-                    user_id = user_id,
-                    image = image,
-                    introduction = introduction
-                )
-            db.session.add(profile)
             db.session.commit()
+            return jsonify({'result': 'success'})
+            # image = data['image']
+            # introduction = data['introduction']
 
-            return jsonify({"result":"success"})
+            # profile = Profile(
+            #         user_id = user_id,
+            #         image = data,
+            #         # introduction = introduction
+            #     )
+            # db.session.add(profile)
+            # db.session.commit()
+            # return jsonify({'result':'success'})
+            
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': str(e)})
+            abort(400, {'error': str(e)})
 
-    if request.method == "PATCH":
-        try:
-            user_profile = Profile.query.filter(Profile.user_id == session['login']).first()
-            
-            data = request.get_json()
-            
-            image = data["image"]
-            introduction = data["introduction"]
 
-            user_profile.image = image
-            user_profile.introduction = introduction
-            
+    if request.method == 'PATCH':
+        user_profile = Profile.query.filter(Profile.user_id == user_id).first()
+        
+        data = request.get_json()
+        
+        image = data['image']
+        introduction = data['introduction']
+
+        user_profile.image = image
+        user_profile.introduction = introduction
+        try:           
             db.session.commit()
-
-            return jsonify({"result": "success"})
+            return jsonify({'result': 'success'})
 
         except Exception as e:
             db.session.rollback()
-            
-            return jsonify({'error': str(e)})
+            abort(400, {'error': str(e)})
 
