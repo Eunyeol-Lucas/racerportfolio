@@ -1,9 +1,11 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
 // Login Page
-const LoginPage = ({ history }) => {
+const LoginPage = () => {
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -21,7 +23,7 @@ const LoginPage = ({ history }) => {
       if (res.status === 200) {
         console.log("access_token", res.data);
         localStorage.setItem("access_token", JSON.stringify(res.data.access_token));
-        history.push("/");
+        history.push("/mainmain");
         alert("로그인에 성공하였습니다.");
       }
     }).catch((e => {
