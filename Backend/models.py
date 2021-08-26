@@ -8,31 +8,33 @@ class User(db.Model):
     username        = db.Column(db.String(32), nullable=False)
     userid          = db.Column(db.String(100), nullable=False, unique=True)
     password        = db.Column(db.String(64), nullable=False)
+    profile_image   = db.Column(db.Text,nullable=False, default="./static/default.png")
+    introduction    = db.Column(db.String(100), default="안녕하세요")
 
     def __init__(self, userid, username, password):
-        self.username   = username
-        self.userid     = userid
-        self.password   = password
+        self.username       = username
+        self.userid         = userid
+        self.password       = password
 
     def to_dict(self):
         return {
-            'id': self.id,
             'username': self.username,
-            'userid': self.userid,
+            'profile_image': self.profile_image,
+            'introduction': self.introduction
         }
 
-    profiles = db.relationship("Profile", backref="user", lazy=True)
-    educations = db.relationship("Education", backref="user", lazy=True)
-    awards = db.relationship("Award", backref="user", lazy=True)
-    projects = db.relationship("Project", backref="user", lazy=True)
-    certificates = db.relationship("Certification", backref="user", lazy=True)
+    profiles        = db.relationship("Profile", backref="user", lazy=True)
+    educations      = db.relationship("Education", backref="user", lazy=True)
+    awards          = db.relationship("Award", backref="user", lazy=True)
+    projects        = db.relationship("Project", backref="user", lazy=True)
+    certificates    = db.relationship("Certification", backref="user", lazy=True)
 
 
 # 사용자 프로필
 class Profile(db.Model):
     __tablename__   = "profiles"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     profile_image   = db.Column(db.Text,nullable=False)
     introduction    = db.Column(db.String(100))
 
@@ -47,7 +49,7 @@ class Profile(db.Model):
 class Education(db.Model):
     __tablename__   = "educations"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     school          = db.Column(db.String(100), nullable=False)
     major           = db.Column(db.String(100), nullable=False)
     status          = db.Column(db.Integer)
@@ -65,7 +67,7 @@ class Education(db.Model):
 class Award(db.Model):
     __tablename__   = "awards"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     name          = db.Column(db.String(255))
     description     = db.Column(db.String(255))
 
@@ -80,7 +82,7 @@ class Award(db.Model):
 class Project(db.Model):
     __tablename__   = "projects"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     title           = db.Column(db.String(255), nullable=False) 
     content         = db.Column(db.String(255), nullable=False) 
     start_date      = db.Column(db.Date, nullable=False)
@@ -100,7 +102,7 @@ class Project(db.Model):
 class Certification(db.Model):
     __tablename__   = "certificates"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_id         = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     name            = db.Column(db.String(100), nullable=False)
     certified_by    = db.Column(db.String(100), nullable=False)
     certified_date  = db.Column(db.Date, nullable=False)

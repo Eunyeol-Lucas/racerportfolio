@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 // Login Page
 const LoginPage = () => {
@@ -13,7 +13,7 @@ const LoginPage = () => {
       alert("아이디 또는 비밀번호를 입력해주세요")
       return;
     };
-    if (!userId && !password) return;
+    // if (!userId && !password) return;
     const body = {
       userId,
       password,
@@ -23,7 +23,7 @@ const LoginPage = () => {
       if (res.status === 200) {
         console.log("access_token", res.data);
         localStorage.setItem("access_token", JSON.stringify(res.data.access_token));
-        history.push("/mainmain");
+        history.push("/main");
         alert("로그인에 성공하였습니다.");
       }
     }).catch((e => {

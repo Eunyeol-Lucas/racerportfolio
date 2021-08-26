@@ -7,6 +7,7 @@ import {
   Profile,
   Project,
 } from '../components/allComponents'
+
 const Main = () => {
 //   const isLogin = useSelector((state) => state.auth);
 //   console.log(isLogin);

@@ -7,7 +7,7 @@ bp = Blueprint('register', __name__)
 bcrypt = Bcrypt()
 
 # 회원가입 
-@bp.route('/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=['POST'])
 def register():
     data = request.json
 
@@ -19,14 +19,13 @@ def register():
     username = data['username']
     pw_hash = bcrypt.generate_password_hash(password).decode()
     
+    
+    user = User(username = username, userid=register_id, password=pw_hash)
+    db.session.add(user)
     try:
-        user = User(username = username, userid=register_id, password=pw_hash)
-        db.session.add(user)
         db.session.commit()
-        
         return jsonify({'result': 'success'})
 
     except Exception as e:
         db.session.rollback()
         abort(400,{'error': 'str(e)'} )
-        # jsonify({'error': 'str(e)'})

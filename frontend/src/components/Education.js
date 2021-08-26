@@ -1,35 +1,69 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import CreateEducationInputList from "./Education/EducationInput";
+import EducationList from "./Education/EducationList";
+import axios from "axios";
+import authHeader from "../modules/authHeader";
+import styled from "styled-components";
 
 const Education = () => {
-  // const auth = useSelector((state) => state.auth);
+  const [educationList, setEducationList] = useState([]);
+  const [educationStatus, setEducationStatus] = useState({
+    name: "",
+    major: "",
+    status: "",
+  });
+  const [addEducations, setAddEducations] = useState([]);
+  const [isToggle, setIsToggle] = useState(true);
+
+  useEffect(() => {
+    const requestUserEdu = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.REACT_APP_BASE_URL}/education`,
+          { headers: authHeader() }
+        );
+        console.log(response);
+        setEducationList(response.data);
+      } catch (err) {
+        console.log(err.response);
+      }
+    };
+    requestUserEdu();
+  }, []);
+
+  const { school, major, status } = educationStatus;
+  const onChange = (e) => {
+    const { name, value } = e.target;
+    setEducationStatus({
+      ...educationStatus,
+      [name]: value,
+    });
+  };
+
+  const onSubmit = (e) => {
+    setAddEducations([...addEducations, educationStatus]);
+  };
 
   return (
-    <div>
-      <div>
-        <h2> 학력 </h2>
-        <p> 학교 이름 </p>
-        <p> 전공 </p>
-      </div>
-      <div>
-        <form>
-          <input placeholder="학교 이름" />
-          <input placeholder="전공" />
-          <p>
-            <input type="radio" name="condition" value="재학중" />
-            재학중
-            <input type="radio" name="condition" value="학사졸업" />
-            학사졸업
-            <input type="radio" name="condition" value="석사졸업" />
-            석사졸업
-            <input type="radio" name="condition" value="박사졸업" />
-            박사졸업
-          </p>
-        </form>
-      </div>
-      <button> 수정 </button>
-    </div>
+    <Container>
+      <h2>학력</h2>
+      {isToggle ? (
+        <EducationList
+          educationList={educationList}
+          setIsToggle={setIsToggle}
+        />
+      ) : (
+        <CreateEducationInputList
+          educationList={educationList}
+          setIsToggle={setIsToggle}
+        />
+      )}
+    </Container>
   );
 };
 
 export default Education;
+
+const Container = styled.div`
+  background-color: yellow;
+`;

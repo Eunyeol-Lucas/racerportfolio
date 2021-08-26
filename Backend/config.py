@@ -8,5 +8,5 @@ SQLALCHEMY_TRACK_MODIFICATIONS = 1
 secret_key = 'asdasdasdasd'
 
 JWT_SECRET_KEY = "super-secret"  
-JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
+JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=3)
 JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)

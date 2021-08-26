@@ -1,27 +1,22 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import CertificateList from "./Certificate/CertificateList";
+import CreateCertificateInput from "./Certificate/CertificateInput";
+import styled from "styled-components";
+
 
 const Certificate = () => {
-  // const auth = useSelector((state) => state.auth);
 
   return (
-    <div>
-      <div>
-        <h2> 자격증 </h2>
-        <p> 자격증 명 </p>
-        <p> 발급기관 </p>
-        <p> 취득 날짜 </p>
-      </div>
-      <div>
-        <form>
-          <input placeholder="자격증 몇" />
-          <input placeholder="발급 기관" />
-          <input placeholder="취득 날짜" />
-          <button type="submit"> 수정 </button>
-        </form>
-      </div>
-    </div>
+    <Container>
+      <h2>자격증</h2>
+      <CertificateList />
+      <CreateCertificateInput />
+    </Container>
   );
 };
 
 export default Certificate;
+
+const Container = styled.div`
+  background-color: gray;
+`

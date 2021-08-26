@@ -5,26 +5,23 @@ from flask_jwt_extended import *
 
 bp = Blueprint('education', __name__)
 # 학력 사항
-@bp.route('/edu', methods = ['GET', 'POST', 'PATCH', 'DELETE'])
+@bp.route('/education', methods = ['GET', 'POST', 'PATCH', 'DELETE'])
 @jwt_required()
 def education():
     user_id = get_jwt_identity()
+    status = ["재학", "졸업", "석사졸업", "박사졸업"]
     # 메인페이지에 접속할 경우 저장된 education 정보를 요청
     if request.method == 'GET':
         try:
             user_education = Education.query.filter(Education.user_id == user_id).all()
             education_list = [
-                {
-                    'id': education.id,
-                    'name': education.name,
-                    'major': education.major,
-                    'status': education.status
-                } for education in user_education
+                Education.to_dict(education) for education in user_education
             ]
             return jsonify(education_list)
         except Exception as e:
             db.session.rollback()
             return jsonify({'error': str(e)})
+
     # 1개 이상의 education 정보 data를 Education db에 저장 요청
     if request.method == 'POST':
         data = request.json
@@ -86,3 +83,16 @@ def education():
         except Exception as e:
             db.session.rollback()
             abort(400,{'error': str(e)})
+
+# def chunsik():
+#     user_id = 6
+#     school = "지금가는중"
+#     major = "귀찮은데 내일볼과"
+#     status = "2"
+#     User_education = Education(user_id = user_id, school=school, major = major, status=status)
+#     db.session.add(User_education)
+#     db.session.commit()
+#     return jsonify({"result":"success"})
+
+
+

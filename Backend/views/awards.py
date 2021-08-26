@@ -13,7 +13,6 @@ def awards():
     if request.method == 'GET':
         try:
             user_awards = Award.query.filter(Award.user_id == user_id).all()
-            Award.to_dict()
             awards_list = [
                 Award.to_dict(award) for award in user_awards
             ]
@@ -26,7 +25,7 @@ def awards():
     if request.method == 'POST':
         
         data = request.json
-        for list in data['awards_list']:
+        for list in data['data']:
             name = list['name']
             description = list['description']
 

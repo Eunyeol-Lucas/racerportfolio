@@ -1,4 +1,4 @@
-from flask import request, jsonify, Blueprint
+from flask import request, jsonify, Blueprint, abort
 from models import Project
 from db_connect import db
 from flask_jwt_extended import *
@@ -25,28 +25,30 @@ def awards():
 
     # 1개 이상의 awards 정보 data를 Award db에 저장 요청
     if request.method == 'POST':
-        try:
-            data = request.json
-            for list in data['projects_list']:
-                title = list['title']
-                content = list['content']
-                start_date = list['start_date']
-                end_date = list['end_date']
+        
+        data = request.json
+        
+        for list in data['data']:
+            title = list['title']
+            content = list['content']
+            start_date = list['start_date']
+            end_date = list['end_date']
 
-                project = Project(
-                    user_id = user_id,
-                    title = title,
-                    content = content,
-                    start_date = start_date,
-                    end_date = end_date
-                )
-                db.session.add(project)
+            project = Project(
+                user_id = user_id,
+                title = title,
+                content = content,
+                start_date = start_date,
+                end_date = end_date
+            )
+            db.session.add(project)
+        try:
             db.session.commit()
             return jsonify({'result': 'success'})
 
         except Exception as e:
             db.session.rollback()
-            return jsonify({'error': str(e)})
+            abort(400,{'error': str(e)})
 
     # Award 데이터 수정 요청
     if request.method == 'PATCH':
