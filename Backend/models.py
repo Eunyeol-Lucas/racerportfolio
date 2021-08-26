@@ -24,7 +24,6 @@ class User(db.Model):
             'introduction': self.introduction
         }
 
-    profiles        = db.relationship("Profile", backref="user", lazy=True)
     educations      = db.relationship("Education", backref="user", lazy=True)
     awards          = db.relationship("Award", backref="user", lazy=True)
     projects        = db.relationship("Project", backref="user", lazy=True)

@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint, request, abort
 from werkzeug.utils import secure_filename
-from models import User
+from models import *
 from db_connect import db
 from flask_jwt_extended import *
 import random
@@ -60,25 +60,42 @@ def profile():
                 db.session.rollback()
                 abort(400, {'error': str(e)})
         
-       
+
+# 클라이언트 메인페이지 접속시 유저 정보 요청
 @bp.route('/profile/users', methods=["GET"])
 @jwt_required()
 def all_profile():
-    result = []
     all_user = User.query.all()
-
-    for i in all_user:
-        data = User.to_dict(i)
-        result.append(data)
+    result_list = [User.to_dict(user) for user in all_user ]
     
-    return jsonify(result)
+    return jsonify(result_list)
+
 
 @bp.route('/profile/users/<int:user_id>', methods=["GET"])
 @jwt_required()
-def user_info(user_id):
+def user_information(user_id):
+    user = User.query.filter(User.id == user_id).first()
+    users = User.to_dict(user)
+    
+    def data_table(Table):
+        return Table.query.filter(Table.user_id == user_id).all()
 
+    project_list = [ 
+        Project.to_dict(project) for project in data_table(Project)
+    ]
+    education_list = [
+        Education.to_dict(education) for education in data_table(Education)
+    ]
+    award_list = [
+        Award.to_dict(award) for award in data_table(Award)
+    ]
+    certificate_list = [
+        Certification.to_dict(certificate) for certificate in data_table(Certification)
+    ]
+    
 
+    
 
-    pass
+    return jsonify({"users" : users, "project_list": project_list, "education_list": education_list, "award_list": award_list, "certificate_list": certificate_list})
 
 
