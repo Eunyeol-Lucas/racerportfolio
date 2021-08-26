@@ -18,6 +18,7 @@ class User(db.Model):
 
     def to_dict(self):
         return {
+            'id': self.id,
             'username': self.username,
             'profile_image': self.profile_image,
             'introduction': self.introduction
@@ -29,21 +30,6 @@ class User(db.Model):
     projects        = db.relationship("Project", backref="user", lazy=True)
     certificates    = db.relationship("Certification", backref="user", lazy=True)
 
-
-# 사용자 프로필
-class Profile(db.Model):
-    __tablename__   = "profiles"
-    id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
-    user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
-    profile_image   = db.Column(db.Text,nullable=False)
-    introduction    = db.Column(db.String(100))
-
-    def to_dict(self):
-        return {
-            'user_id': self.user_id,
-            'profile_image': self.profile_image,
-            'introduction': self.introduction
-        }
 
 # 사용자 학력 사항
 class Education(db.Model):

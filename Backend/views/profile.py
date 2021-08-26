@@ -1,6 +1,6 @@
 from flask import jsonify, Blueprint, request, abort
 from werkzeug.utils import secure_filename
-from models import Profile, User
+from models import User
 from db_connect import db
 from flask_jwt_extended import *
 import random
@@ -61,5 +61,24 @@ def profile():
                 abort(400, {'error': str(e)})
         
        
+@bp.route('/profile/users', methods=["GET"])
+@jwt_required()
+def all_profile():
+    result = []
+    all_user = User.query.all()
+
+    for i in all_user:
+        data = User.to_dict(i)
+        result.append(data)
+    
+    return jsonify(result)
+
+@bp.route('/profile/users/<int:user_id>', methods=["GET"])
+@jwt_required()
+def user_info(user_id):
+
+
+
+    pass
 
 
