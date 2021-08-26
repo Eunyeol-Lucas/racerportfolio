@@ -1,107 +1,44 @@
-import React, { useState } from "react";
+import React from "react";
 
-const CreateCertificateInput = ({
-  name,
-  certified_by,
-  certified_date,
-  onChange,
-  onSave,
-  onSubmit,
+export default function CertificateInput({
   certificateList,
-  setCertificateStatus,
-  setIsToggle,
-  onEdit,
-  onSubmitEdit,
-}) => {
-  const [countList, setCountList] = useState([]);
-
-  const onAddDetailDiv = () => {
-    let countArr = [...countList];
-    let counter = countArr.slice(-1)[0];
-    counter += 1;
-    countArr.push(counter);
-    setCountList(countArr);
-  };
-
-  return (
-    <div>
-      <CertificateInput
-        countList={countList}
-        name={name}
-        certified_by={certified_by}
-        certified_date={certified_date}
-        onChange={onChange}
-        onSave={onSave}
-        onSubmit={onSubmit}
-        certificateList={certificateList}
-        setCertificateStatus={setCertificateStatus}
-        setIsToggle={setIsToggle}
-        onEdit={onEdit}
-        onSubmitEdit={onSubmitEdit}
-      />
-      <button onClick={onAddDetailDiv}>추가</button>
-    </div>
-  );
-};
-
-function CertificateInput({
-  countList,
-  name,
-  certified_by,
-  certified_date,
-  onChange,
-  onSave,
+  setName,
+  setCertified_by,
+  setCertified_date,
   onSubmit,
-  certificateList,
-  setCertificateStatus,
   setIsToggle,
-  onEdit,
-  onSubmitEdit,
 }) {
   return (
     <div>
       <div>
         {certificateList &&
           certificateList.map((certificate, idx) => (
-            <div key={idx}>
-              <form onSubmit={onSave}>
+            <div key={`certificate-${idx}`}>
+              <form>
                 <p>
                   <input
-                    key={`${idx}-${certificate.id}`}
-                    name="id"
-                    type="text"
-                    onChange={onEdit}
-                    value={certificate.id}
-                    style={{ display: "none" }}
-                  />
-                </p>
-                <p>
-                  <input
-                    key={`${idx}-${certificate.name}`}
                     type="text"
                     name="name"
-                    onChange={onEdit}
+                    onChange={(e) => setName(e.target.name)}
                     defaultValue={certificate.name}
                     required="required"
                   />
                 </p>
                 <p>
                   <input
-                    key={`${idx}-${certificate.certified_by}`}
                     type="text"
                     name="certified_by"
-                    onChange={onChange}
+                    onChange={(e) => setCertified_by(e.target.value)}
                     defaultValue={certificate.certified_by}
                     required="required"
                   />
                 </p>
                 <p>
                   <input
-                    key={`${idx}-${certificate.certified_date}`}
                     type="text"
                     name="certified_date"
-                    onChange={onChange}
                     defaultValue={certificate.certified_date}
+                    onChange={(e) => setCertified_date(e.target.value)}
                     required="required"
                   />
                 </p>
@@ -115,47 +52,38 @@ function CertificateInput({
       </div>
 
       <div>
-        {countList &&
-          countList.map((_, idx) => (
-            <div key={idx}>
-              <form onSubmit={onSave}>
-                <p key={`${idx}-${name}`}>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="자격증 명"
-                    onChange={onChange}
-                    value={name}
-                  />
-                </p>
-                <p>
-                  <input
-                    key={`${idx}-${certified_by}`}
-                    type="text"
-                    name="certified_by"
-                    placeholder="취득 기관"
-                    onChange={onChange}
-                    value={certified_by}
-                  />
-                </p>
-                <p>
-                  <input
-                    key={`${idx}-${certified_date}`}
-                    type="text"
-                    name="certified_by"
-                    placeholder="자격증 취득일"
-                    onChange={onChange}
-                    value={certified_date}
-                  />
-                </p>
-                <button type="submit">이거 저장</button>
-              </form>
-            </div>
-          ))}
+        <form onSubmit={onSubmit}>
+          <p>
+            <input
+              type="text"
+              name="name"
+              placeholder="자격증 명"
+              onChange={(e) => setName(e.target.value)}
+              required="required"
+            />
+          </p>
+          <p>
+            <input
+              type="text"
+              name="certified_by"
+              placeholder="취득 기관"
+              onChange={(e) => setCertified_by(e.target.value)}
+              required="required"
+            />
+          </p>
+          <p>
+            <input
+              type="date"
+              name="certified_by"
+              placeholder="자격증 취득일"
+              onChange={(e) => setCertified_date(e.target.value)}
+              required="required"
+            />
+          </p>
+          <button type="submit">저장</button>
+        </form>
+        <button onClick={() => setIsToggle(true)}>돌아가기</button>
       </div>
-      <button onClick={onSubmit}>제출</button>
     </div>
   );
 }
-
-export default CreateCertificateInput;

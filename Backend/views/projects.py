@@ -23,34 +23,31 @@ def awards():
             db.session.rollback()
             return jsonify({'error': str(e)})
 
-    # 1개 이상의 awards 정보 data를 Award db에 저장 요청
+    # 1개의 awards 정보 data를 Award db에 저장 요청
     if request.method == 'POST':
         
         data = request.json
         
-        for list in data['data']:
-            title = list['title']
-            content = list['content']
-            start_date = list['start_date']
-            end_date = list['end_date']
+        title = data['title']
+        content = data['content']
+        date1 = data['startDate'][:10]
+        date2 = data['endDate'][:10]
+        
+        user_project = Project(title = title, content = content, 
+            start_date = date1, end_date = date2, user_id = user_id)
 
-            project = Project(
-                user_id = user_id,
-                title = title,
-                content = content,
-                start_date = start_date,
-                end_date = end_date
-            )
-            db.session.add(project)
+        db.session.add(user_project)
         try:
             db.session.commit()
             return jsonify({'result': 'success'})
 
         except Exception as e:
+            print(e)
             db.session.rollback()
-            abort(400,{'error': str(e)})
+            
+            abort(400, {'error': str(e)})
 
-    # Award 데이터 수정 요청
+    # Award 데이터 수정 요청 
     if request.method == 'PATCH':
         try:
             data = request.json

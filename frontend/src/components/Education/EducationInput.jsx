@@ -1,31 +1,10 @@
 import React, { useState } from "react";
 
-const CreateEducationInputList = ({ educationList, setIsToggle }) => {
-  const [countList, setCountList] = useState([]);
-
-  const onAddDetailDiv = () => {
-    let countArr = [...countList];
-    let counter = countArr.slice(-1)[0];
-    counter += 1;
-    countArr.push(counter);
-    setCountList(countArr);
-  };
-
-  return (
-    <div>
-      <EducationInput countList={countList} educationList={educationList} setIsToggle={setIsToggle} />
-      <button onClick={onAddDetailDiv}>추가</button>
-    </div>
-  );
-};
-
-function EducationInput({
+export default function EducationInput({
   educationList,
-  countList,
-  school,
-  major,
-  status,
-  onChange,
+  setSchool,
+  setMajor,
+  setRadio,
   onSubmit,
   setIsToggle,
 }) {
@@ -34,119 +13,129 @@ function EducationInput({
       <div>
         {educationList &&
           educationList.map((education, idx) => (
-            <div key={idx}>
-              <p>
-                <input
-                  key={`${idx}-${education.school}`}
-                  type="text"
-                  name="name"
-                  onChange={onChange}
-                  defaultValue={education.school}
-                />
-              </p>
-              <p>
-                <input
-                  key={`${idx}-${education.major}`}
-                  type="text"
-                  name="major"
-                  onChange={onChange}
-                  defaultValue={education.major}
-                />
-              </p>
+            <div key={`edu-${idx}`}>
+              <form>
+                <p>
+                  <input
+                    type="text"
+                    name="name"
+                    onChange={(e) => setSchool(e.target.value)}
+                    defaultValue={education.school}
+                    required="required"
+                  />
+                </p>
+                <p>
+                  <input
+                    type="text"
+                    name="major"
+                    onChange={(e) => setMajor(e.target.value)}
+                    defaultValue={education.major}
+                    required="required"
+                  />
+                </p>
 
-              <div>
-                <input type="checkbox" id="01" name="status" value="1" />
-                <label htmlFor="01">재학중</label>
+                <div>
+                  <input
+                    type="radio"
+                    name="status"
+                    value={education.value}
+                    onChange={(e) => setRadio(e.target.value)}
+                    required="required"
+                  />
+                  <label htmlFor="01">재학중</label>
 
-                <input type="checkbox" id="02" name="status" value="2" />
-                <label htmlFor="02">학사졸업</label>
+                  <input
+                    type="radio"
+                    name="status"
+                    value={education.value}
+                    onChange={(e) => setRadio(e.target.value)}
+                    required="required"
+                  />
+                  <label htmlFor="02">졸업</label>
 
-                <input type="checkbox" id="03" name="status" value="3" />
-                <label htmlFor="03">석사졸업</label>
+                  <input
+                    type="radio"
+                    name="status"
+                    value={education.value}
+                    onChange={(e) => setRadio(e.target.value)}
+                    required="required"
+                  />
+                  <label htmlFor="03">석사졸업</label>
 
-                <input type="checkbox" id="04" name="status" value="4" />
-                <label htmlFor="04">박사졸업</label>
-              </div>
-
+                  <input
+                    type="radio"
+                    name="status"
+                    value={education.value}
+                    onChange={(e) => setRadio(e.target.value)}
+                    required="required"
+                  />
+                  <label htmlFor="04">박사졸업</label>
+                </div>
+              </form>
               <hr />
             </div>
           ))}
       </div>
       <div>
-        <p>
-          <input
-            type="text"
-            name="name"
-            onChange={onChange}
-            placeholder="학교 이름"
-          />
-        </p>
-        <p>
-          <input
-            type="text"
-            name="major"
-            onChange={onChange}
-            placeholder="전공"
-          />
-        </p>
+        <form onSubmit={onSubmit}>
+          <p>
+            <input
+              type="text"
+              name="name"
+              onChange={(e) => setSchool(e.target.value)}
+              placeholder="학교 이름"
+              required="required"
+            />
+          </p>
+          <p>
+            <input
+              type="text"
+              name="major"
+              onChange={(e) => setMajor(e.target.value)}
+              placeholder="전공"
+              required="required"
+            />
+          </p>
+          <div>
+            <input
+              type="radio"
+              name="status"
+              value="재학중"
+              onChange={(e) => setRadio(e.target.value)}
+              required="required"
+            />
+            <label htmlFor="01">재학중</label>
 
-        <div>
-          <input type="checkbox" id="01" name="status" value="1" />
-          <label htmlFor="01">재학중</label>
+            <input
+              type="radio"
+              name="status"
+              value="졸업"
+              onChange={(e) => setRadio(e.target.value)}
+              required="required"
+            />
+            <label htmlFor="02">졸업</label>
 
-          <input type="checkbox" id="02" name="status" value="2" />
-          <label htmlFor="02">학사졸업</label>
-
-          <input type="checkbox" id="03" name="status" value="3" />
-          <label htmlFor="03">석사졸업</label>
-
-          <input type="checkbox" id="04" name="status" value="4" />
-          <label htmlFor="04">박사졸업</label>
-        </div>
+            <input
+              type="radio"
+              name="status"
+              value="석사졸업"
+              onChange={(e) => setRadio(e.target.value)}
+              required="required"
+            />
+            <label htmlFor="03">석사졸업</label>
+            <input
+              type="radio"
+              name="status"
+              value="박사졸업"
+              onChange={(e) => setRadio(e.target.value)}
+              required="required"
+            />
+            <label htmlFor="04">박사졸업</label>
+          </div>
+          <button type="submit">저장하기</button>
+        </form>
       </div>
-      <div>
-        {countList &&
-          countList.map((_, idx) => (
-            <div key={idx}>
-              <p key={`${idx}-${school}`}>
-                <input
-                  type="text"
-                  name="name"
-                  placeholder="학교 이름"
-                  onChange={onChange}
-                  value={school}
-                />
-              </p>
-              <p>
-                <input
-                  key={`${idx}-${major}`}
-                  type="text"
-                  name="major"
-                  placeholder="전공"
-                  onChange={onChange}
-                  value={major}
-                />
-              </p>
-              <div>
-                <input type="checkbox" id="01" name="status" value="1" />
-                <label htmlFor="01">재학중</label>
-
-                <input type="checkbox" id="02" name="status" value="2" />
-                <label htmlFor="02">학사졸업</label>
-
-                <input type="checkbox" id="03" name="status" value="3" />
-                <label htmlFor="03">석사졸업</label>
-
-                <input type="checkbox" id="04" name="status" value="4" />
-                <label htmlFor="04">박사졸업</label>
-              </div>
-            </div>
-          ))}
-      </div>
-      <button onClick={() => setIsToggle(true)}>저장하기</button>
+      <button onClick={() => setIsToggle(true)}>돌아가기</button>
     </div>
   );
 }
-
-export default CreateEducationInputList;
-

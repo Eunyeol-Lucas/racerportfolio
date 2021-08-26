@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import CreateEducationInputList from "./Education/EducationInput";
+import EducationInput from "./Education/EducationInput";
 import EducationList from "./Education/EducationList";
 import axios from "axios";
 import authHeader from "../modules/authHeader";
@@ -7,12 +7,9 @@ import styled from "styled-components";
 
 const Education = () => {
   const [educationList, setEducationList] = useState([]);
-  const [educationStatus, setEducationStatus] = useState({
-    name: "",
-    major: "",
-    status: "",
-  });
-  const [addEducations, setAddEducations] = useState([]);
+  const [school, setSchool] = useState("");
+  const [major, setMajor] = useState("");
+  const [radio, setRadio] = useState("");
   const [isToggle, setIsToggle] = useState(true);
 
   useEffect(() => {
@@ -29,19 +26,27 @@ const Education = () => {
       }
     };
     requestUserEdu();
-  }, []);
+  }, [isToggle]);
 
-  const { school, major, status } = educationStatus;
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setEducationStatus({
-      ...educationStatus,
-      [name]: value,
-    });
-  };
-
-  const onSubmit = (e) => {
-    setAddEducations([...addEducations, educationStatus]);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    console.log(school, major, radio);
+    if (school === "" || major === "" || radio === "") {
+      setIsToggle(true);
+      return;
+    }
+    const body = { school, major, status: radio };
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_BASE_URL}/education`,
+        body,
+        { headers: authHeader() }
+      );
+      console.log(response);
+      setIsToggle(true);
+    } catch (err) {
+      console.log(err.response);
+    }
   };
 
   return (
@@ -53,8 +58,12 @@ const Education = () => {
           setIsToggle={setIsToggle}
         />
       ) : (
-        <CreateEducationInputList
+        <EducationInput
           educationList={educationList}
+          setMajor={setMajor}
+          setSchool={setSchool}
+          setRadio={setRadio}
+          onSubmit={onSubmit}
           setIsToggle={setIsToggle}
         />
       )}

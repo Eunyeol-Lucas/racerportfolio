@@ -2,15 +2,8 @@ import React, { useState } from "react";
 import { Navbar, Nav, Container } from "react-bootstrap";
 
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { logout } from "../redux/action";
 const Navigation = (props) => {
-  const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.auth);
-
-//   const logoutHandler = () => {
-//     dispatch(logout());
-//   };
+  
 
   return (
     <Navbar bg="light" expand="lg">

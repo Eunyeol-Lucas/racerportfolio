@@ -26,18 +26,13 @@ def education():
     if request.method == 'POST':
         data = request.json
 
-        for datum in data['education_list']:
-            school = datum['school']
-            major = datum['major']
-            status = datum['status']
-        
-            education_list = Education(
-                user_id = user_id,
-                school = school,
-                major = major,
-                status = status
-            )
-            db.session.add(education_list)
+        school = data['school']
+        major = data['major']
+        status = data['status'] 
+
+        user_education = Education(school = school, 
+            major = major, status = status, user_id = user_id)
+        db.session.add(user_education)
         try:
             db.session.commit()
             return jsonify({'result': 'success'})

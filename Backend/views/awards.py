@@ -23,18 +23,14 @@ def awards():
             return jsonify({'error': str(e)})
     # 1개 이상의 awards 정보 data를 Award db에 저장 요청
     if request.method == 'POST':
-        
         data = request.json
-        for list in data['data']:
-            name = list['name']
-            description = list['description']
+        
+        name = data['name']
+        description = data['description']
 
-            award_list = Award(
-                user_id = user_id,
-                name = name,
-                description =  description
-            )
-            db.session.add(award_list)
+        user_award = Award(name = name, description = description, user_id=user_id)
+        db.session.add(user_award)
+        
         try:
             db.session.commit()
             return jsonify({'result': 'success'})

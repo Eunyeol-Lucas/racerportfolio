@@ -55,8 +55,9 @@ export default function Mainpage() {
 
   // username 및 introduction 수정 후 서버로 전달
   const onSubmitIntroduction = async (e) => {
+    e.preventDefault();
     console.log(introduction, username);
-    const body = { introduction: introduction, username: username };
+    const body = { introduction, username };
     try {
       const response = await axios.patch(
         `${process.env.REACT_APP_BASE_URL}/profile`,

@@ -52,7 +52,7 @@ class Education(db.Model):
     user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     school          = db.Column(db.String(100), nullable=False)
     major           = db.Column(db.String(100), nullable=False)
-    status          = db.Column(db.Integer)
+    status          = db.Column(db.String(100))
 
     def to_dict(self):
         return {
@@ -68,7 +68,7 @@ class Award(db.Model):
     __tablename__   = "awards"
     id              = db.Column(db.Integer, primary_key=True, nullable=False, autoincrement=True)
     user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
-    name          = db.Column(db.String(255))
+    name            = db.Column(db.String(255))
     description     = db.Column(db.String(255))
 
     def to_dict(self):
@@ -85,8 +85,8 @@ class Project(db.Model):
     user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     title           = db.Column(db.String(255), nullable=False) 
     content         = db.Column(db.String(255), nullable=False) 
-    start_date      = db.Column(db.Date, nullable=False)
-    end_date        = db.Column(db.Date, nullable=False)
+    start_date      = db.Column(db.String(255), nullable=False)
+    end_date        = db.Column(db.String(255), nullable=False)
 
     def to_dict(self):
         return {
@@ -95,7 +95,7 @@ class Project(db.Model):
             'title': self.title,
             'content': self.content,
             'start_date': self.start_date,
-            'end-_data': self.end_date
+            'end_date': self.end_date
         }
 
 # 사용자 자격 정보
@@ -105,7 +105,7 @@ class Certification(db.Model):
     user_id         = db.Column(db.Integer, db.ForeignKey('user.id', ondelete='CASCADE'), nullable=False)
     name            = db.Column(db.String(100), nullable=False)
     certified_by    = db.Column(db.String(100), nullable=False)
-    certified_date  = db.Column(db.Date, nullable=False)
+    certified_date  = db.Column(db.String(100), nullable=False)
 
     def to_dict(self):
         return {

@@ -12,9 +12,6 @@ function App() {
     <>
       <ul>
         <li>
-          <Link to="/">홈</Link>
-        </li>
-        <li>
           <Link to="/login">로그인</Link>
         </li>
         <li>
@@ -30,7 +27,6 @@ function App() {
           <Link to="/logout">로그아웃</Link>
         </li>
       </ul>
-      <Route component={Home} exact path="/" />
       <Route component={LoginPage} path="/login" />
       <Route component={RegisterPage} path="/register" />
       <PrivateRoute component={Network} path="/network" />

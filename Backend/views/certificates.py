@@ -5,7 +5,7 @@ from flask_jwt_extended import *
 
 bp = Blueprint('certificate', __name__)
 # 자격증 내역
-@bp.route('/certified', methods = ['GET','POST', 'PATCH', 'DELETE'])
+@bp.route('/certificate', methods = ['GET','POST', 'PATCH', 'DELETE'])
 @jwt_required()
 def certification():
     user_id = get_jwt_identity()
@@ -24,20 +24,17 @@ def certification():
             abort(400,{'error': str(e)})
     # 1개 이상의 certificate 정보 data를 Certification db에 저장 요청
     if request.method == 'POST':
-        
         data = request.json
-        for list in data['certificates_list']:
-            name = list['name']
-            certified_by = list['certified_by']
-            certified_date = list['certified_date']
 
-            certificate_list = Certification(
-                user_id = user_id,
-                name = name,
-                certified_by =  certified_by,
-                certified_date = certified_date
-            )
-            db.session.add(certificate_list)
+        name = data['name']
+        certified_by = data['certified_by']
+        certified_date = data['certified_date']
+        
+        user_certificate = Certification(name = name, 
+            certified_by = certified_by, certified_date = certified_date, 
+            user_id = user_id)
+        
+        db.session.add(user_certificate)
         try:
             db.session.commit()
             return jsonify({'result': 'success'})
@@ -45,6 +42,7 @@ def certification():
         except Exception as e:
             db.session.rollback()
             abort(400,{'error': str(e)})
+    
     # certification 데이터 수정 요청
     if request.method == 'PATCH':
 

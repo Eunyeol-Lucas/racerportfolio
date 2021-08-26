@@ -7,13 +7,13 @@ export default function ProjectList({ projectList }) {
         projectList.map((project, idx) => {
           return (
             <div key={idx}>
-              <p key={`${idx}-${project.id}`} style={{ display: "none" }}>
-                {project.id}
-              </p>
-              <p key={`${idx}-${project.title}`}>{project.title}</p>
-              <p key={`${idx}-${project.content}`}>{project.content}</p>
-              <p key={`${idx}-${project.start_date}`}>
-                {project.start_date}-{project.end_date}
+              <p style={{ display: "none" }}>{project.id}</p>
+              <p>{project.title}</p>
+              <p>{project.content}</p>
+              <p>
+                <span>{project.start_date}</span>
+                <span> - </span>
+                <span>{project.end_date}</span>
               </p>
               <hr />
             </div>

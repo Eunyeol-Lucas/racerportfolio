@@ -7,13 +7,13 @@ export default function AwardList({ awardList, setIsToggle }) {
       {awardList &&
         awardList.map((award, idx) => {
           return (
-            <div key={idx}>
-              <p key={`${idx}-${award.id}`} style={{ display: "none" }}>
+            <div key={`award-${idx}`}>
+              <p style={{ display: "none" }}>
                 {award.id}
               </p>
-              <p key={`${idx}-${award.name}`}>{award.name}</p>
-              <p key={`${idx}-${award.description}`}>{award.description}</p>
-              <hr />
+              <p>{award.name}</p>
+              <p>{award.description}</p>
+              {awardList.length > 1 + idx && <hr />}
             </div>
           );
         })}

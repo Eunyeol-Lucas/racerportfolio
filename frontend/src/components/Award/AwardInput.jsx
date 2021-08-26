@@ -1,52 +1,12 @@
-import React, { useState } from "react";
+import React from "react";
 
-const CreateAwardInput = ({
-  name,
-  description,
-  onChange,
-  onSave,
+export default function AwardInput({
+  awardName,
+  awardDescription,
+  setAwardName,
+  setAwardDescription,
   onSubmit,
   awardList,
-  setAwardStatus,
-  setIsToggle,
-}) => {
-  const [countList, setCountList] = useState([]);
-
-  const onAddDetailDiv = () => {
-    let countArr = [...countList];
-    let counter = countArr.slice(-1)[0];
-    counter += 1;
-    countArr.push(counter);
-    setCountList(countArr);
-  };
-
-  return (
-    <div>
-      <AwardInput
-        countList={countList}
-        name={name}
-        description={description}
-        onChange={onChange}
-        onSave={onSave}
-        onSubmit={onSubmit}
-        awardList={awardList}
-        setAwardStatus={setAwardStatus}
-        setIsToggle={setIsToggle}
-      />
-      <button onClick={onAddDetailDiv}>추가</button>
-    </div>
-  );
-};
-
-function AwardInput({
-  countList,
-  name,
-  description,
-  onChange,
-  onSave,
-  onSubmit,
-  awardList,
-  setAwardStatus,
   setIsToggle,
 }) {
   return (
@@ -55,13 +15,13 @@ function AwardInput({
         {awardList &&
           awardList.map((award, idx) => (
             <div key={idx}>
-              <form onSubmit={onSave}>
+              <form>
                 <p>
                   <input
                     key={`${idx}-${award.name}`}
                     type="text"
                     name="name"
-                    onChange={onChange}
+                    onChange={(e) => setAwardName(e.target.value)}
                     defaultValue={award.name}
                   />
                 </p>
@@ -70,71 +30,40 @@ function AwardInput({
                     key={`${idx}-${award.description}`}
                     type="text"
                     name="description"
-                    onChange={onChange}
+                    onChange={(e) => setAwardDescription(e.target.value)}
                     defaultValue={award.description}
                   />
                 </p>
-                <button key={idx} type="submit">
-                  이거 저장
-                </button>
               </form>
               <hr />
             </div>
           ))}
       </div>
       <div>
-        <form onSubmit={onSave}>
+        <form onSubmit={onSubmit}>
           <p>
             <input
               type="text"
               name="name"
-              onChange={onChange}
+              onChange={(e) => setAwardName(e.target.value)}
               placeholder="수상 내역"
+              required="required"
             />
           </p>
           <p>
             <input
               type="text"
               name="description"
-              onChange={onChange}
+              onChange={(e) => setAwardDescription(e.target.value)}
               placeholder="상세 내역"
+              required="required"
             />
           </p>
-          <button type="submit">이거 저장</button>
+          <button type="submit">저장</button>
         </form>
       </div>
 
-      <div>
-        {countList &&
-          countList.map((_, idx) => (
-            <div key={idx}>
-              <form onSubmit={onSave}>
-                <p key={`${idx}-${name}`}>
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="수상 내역"
-                    onChange={onChange}
-                    
-                  />
-                </p>
-                <p key={`${idx}-${description}`}>
-                  <input
-                    type="text"
-                    name="description"
-                    placeholder="상세 내역"
-                    onChange={onChange}
-                    
-                  />
-                </p>
-                <button type="submit">이거 저장</button>
-              </form>
-            </div>
-          ))}
-      </div>
-      <button onClick={onSubmit}>제출</button>
+      <button onClick={() => setIsToggle(true)}>돌아가기</button>
     </div>
   );
 }
-
-export default CreateAwardInput;

@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from "react";
 import AwardList from "./Award/AwardList";
-import CreateAwardInput from "./Award/AwardInput";
+import AwardInput from "./Award/AwardInput";
 import styled from "styled-components";
 import axios from "axios";
 import authHeader from "../modules/authHeader";
 
 const Award = () => {
   const [awardList, setAwardList] = useState([]);
-  const [awardStatus, setAwardStatus] = useState({
-    name: "",
-    description: "",
-  });
-  const [awardSubmitList, setAwardSubmitList] = useState([]);
-  const [awardEditList, setAwardEditList] = useState([]);
-  const [awardEditStatus, setAwardEditStatus] = useState(null);
+  const [awardName, setAwardName] = useState("");
+  const [awardDescription, setAwardDescription] = useState("");
   const [isToggle, setIsToggle] = useState(true);
 
   useEffect(() => {
@@ -30,50 +25,13 @@ const Award = () => {
       }
     };
     requestUserAward();
-  }, []);
-  
-  const { name, description } = awardStatus;
-  const onChange = (e) => {
-    const { name, value } = e.target;
-    setAwardStatus({
-      ...awardStatus,
-      [name]: value,
-    });
-  };
+  }, [isToggle]);
 
-  const onSave = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
-    if (awardStatus.name === "" || awardStatus.description === "")
-      return alert("수상 이력을 입력해주세요.");
-    setAwardSubmitList([...awardSubmitList, awardStatus]);
-  };
-
-  const onEdit = (e, idx) => {
-    const { name, value } = e.target;
-    setAwardEditStatus({
-      ...awardEditStatus,
-      [name]: value,
-    });
-  };
-
-  const onSubmitEdit = async (e) => {
-    e.preventDefault();
-    console.log(awardEditStatus);
-    try {
-      const response = await axios.patch(
-        `${process.env.REACT_APP_BASE_URL}/award`,
-        awardEditStatus,
-        { headers: authHeader() }
-      );
-      console.log(response);
-    } catch (err) {
-      console.log(err.response);
-    }
-  };
-
-  const onSubmit = async () => {
-    const body = { data: awardSubmitList };
-    console.log(body);
+    console.log(awardName, awardDescription);
+    if (awardName === "" || awardDescription === "") { setIsToggle(true); return;}
+    const body = { name: awardName, description: awardDescription };
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/award`,
@@ -81,7 +39,7 @@ const Award = () => {
         { headers: authHeader() }
       );
       console.log(response);
-      setIsToggle(true);
+      setIsToggle(true)
     } catch (err) {
       console.log(err.response);
     }
@@ -93,20 +51,17 @@ const Award = () => {
       {isToggle ? (
         <div>
           <AwardList awardList={awardList} setIsToggle={setIsToggle} />
-          <button onClick={()=>setIsToggle(false)}>수정하기</button>
+          <button onClick={() => setIsToggle(false)}>수정하기</button>
         </div>
       ) : (
-        <CreateAwardInput
-          name={name}
-          description={description}
-          onChange={onChange}
-          onSave={onSave}
+        <AwardInput
+          awardName={awardName}
+          awardDescription={awardDescription}
+          setAwardName={setAwardName}
+          setAwardDescription={setAwardDescription}
           onSubmit={onSubmit}
           awardList={awardList}
-          setAwardStatus={setAwardStatus}
           setIsToggle={setIsToggle}
-          onEdit={onEdit}
-          onSubmitEdit={onSubmitEdit}
         />
       )}
     </Container>
