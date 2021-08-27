@@ -27,7 +27,6 @@ const UserContainer = styled.div`
 `;
 
 export default function Network() {
-
   const [cardData, setCardData] = useState([]);
   const [totalCardCount, setTotalCardCount] = useState(0);
   const [search, setSearch] = useState("");
@@ -42,7 +41,7 @@ export default function Network() {
       setTotalCardCount(response.data.length);
       setCardData(response.data);
     })();
-  }, [search]);
+  }, []);
 
   return (
     <Container>

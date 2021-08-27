@@ -1,5 +1,6 @@
 import React from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
+import { useState, useEffect } from "react";
 import {
   Award,
   Certificate,
@@ -9,6 +10,12 @@ import {
 } from "../components/allComponents";
 
 const Main = () => {
+  const [status, setState] = useState(false);
+
+  useEffect(() => {
+    setState(!status);
+  }, [])
+
   return (
     <Container>
       <Profile />

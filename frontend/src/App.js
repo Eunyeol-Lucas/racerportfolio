@@ -7,8 +7,9 @@ import PrivateRoute from "./Helper/PrivateRoute";
 import Main from "./pages/Main";
 import Logout from "./pages/Logout";
 import Users from "./pages/Users";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 function App() {
+
   return (
     <>
       <Container>
@@ -31,10 +32,10 @@ function App() {
           )}
         </Navi>
       </Container>
-      <Route component={LoginPage} exact path={["/login", "/"]} />
+      <Route component={LoginPage} path="/login" />
       <Route component={RegisterPage} path="/register" />
       <PrivateRoute component={Network} path="/network" />
-      <PrivateRoute exact component={Main} path="/main" />
+      <PrivateRoute exact component={Main} path={["/", "/main"]} />
       <PrivateRoute component={Users} path="/main/user/:id" />
       <PrivateRoute component={Logout} path="/logout" />
     </>

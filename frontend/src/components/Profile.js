@@ -5,7 +5,7 @@ import styled from "styled-components";
 import ProfileList from "./Profile/ProfileList";
 import ProfileUpload from "./Profile/ProfileUpload";
 import { BiEditAlt } from "react-icons/bi";
-import * as Main from './Components'
+import * as Main from "./Components";
 
 // Racer 정보 및 수정 업로드 기능 page
 export default function Mainpage() {
@@ -45,7 +45,7 @@ export default function Mainpage() {
     formData.append("file", imageFile[0]);
     try {
       const response = await axios.patch(
-        `${process.env.REACT_APP_BASE_URL}/profile`,
+        `${process.env.REACT_APP_BASE_URL}/api/profile`,
         formData,
         { headers: authHeader() }
       );
@@ -65,7 +65,7 @@ export default function Mainpage() {
     const body = { introduction, username };
     try {
       const response = await axios.patch(
-        `${process.env.REACT_APP_BASE_URL}/profile`,
+        `${process.env.REACT_APP_BASE_URL}/api/profile`,
         body,
         { headers: authHeader() }
       );

@@ -42,7 +42,7 @@ const Certificate = () => {
     const body = { name, certified_by, certified_date };
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/certificate`,
+        `${process.env.REACT_APP_BASE_URL}/api/certificate`,
         body,
         { headers: authHeader() }
       );

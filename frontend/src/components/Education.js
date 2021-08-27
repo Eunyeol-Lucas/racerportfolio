@@ -42,7 +42,7 @@ const Education = () => {
     const body = { school, major, status: radio };
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/education`,
+        `${process.env.REACT_APP_BASE_URL}/api/education`,
         body,
         { headers: authHeader() }
       );

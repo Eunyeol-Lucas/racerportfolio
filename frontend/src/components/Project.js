@@ -39,7 +39,7 @@ const Project = () => {
     const body = { title, content, startDate, endDate };
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/project`,
+        `${process.env.REACT_APP_BASE_URL}/api/project`,
         body,
         { headers: authHeader() }
       );

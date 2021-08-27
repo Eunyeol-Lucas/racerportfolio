@@ -41,7 +41,7 @@ const Award = () => {
     const body = { name: awardName, description: awardDescription };
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/award`,
+        `${process.env.REACT_APP_BASE_URL}/api/award`,
         body,
         { headers: authHeader() }
       );
