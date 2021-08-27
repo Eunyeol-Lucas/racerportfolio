@@ -3,7 +3,7 @@ from flask import request, Blueprint, jsonify
 from flask_bcrypt import Bcrypt
 from models import *
 
-bp = Blueprint('register', __name__)
+bp = Blueprint('register', __name__, url_prefix='/api')
 bcrypt = Bcrypt()
 
 # 회원가입 

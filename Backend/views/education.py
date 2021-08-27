@@ -3,7 +3,7 @@ from models import Education
 from db_connect import db
 from flask_jwt_extended import *
 
-bp = Blueprint('education', __name__)
+bp = Blueprint('education', __name__, url_prefix='/api')
 # 학력 사항
 @bp.route('/education', methods = ['GET', 'POST', 'PATCH', 'DELETE'])
 @jwt_required()

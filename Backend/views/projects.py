@@ -3,7 +3,7 @@ from models import Project
 from db_connect import db
 from flask_jwt_extended import *
 
-bp=Blueprint('project', __name__)
+bp=Blueprint('project', __name__, url_prefix='/api')
 
 @bp.route('/project', methods = ['GET', 'POST', 'PATCH', 'DELETE'])
 @jwt_required()

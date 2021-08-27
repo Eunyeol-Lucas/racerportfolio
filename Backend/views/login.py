@@ -3,7 +3,7 @@ from models import User
 from flask_bcrypt import Bcrypt
 from flask_jwt_extended import *
 
-bp = Blueprint('login', __name__)
+bp = Blueprint('login', __name__, url_prefix='/api')
 
 bcrypt = Bcrypt()
 

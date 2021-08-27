@@ -3,7 +3,7 @@ from models import Certification
 from db_connect import db
 from flask_jwt_extended import *
 
-bp = Blueprint('certificate', __name__)
+bp = Blueprint('certificate', __name__, url_prefix='/api')
 # 자격증 내역
 @bp.route('/certificate', methods = ['GET','POST', 'PATCH', 'DELETE'])
 @jwt_required()

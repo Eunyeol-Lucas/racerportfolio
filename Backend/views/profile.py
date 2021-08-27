@@ -6,7 +6,7 @@ from flask_jwt_extended import *
 import random
 
 # 프로필
-bp = Blueprint('profile', __name__)
+bp = Blueprint('profile', __name__, url_prefix='/api')
 
 
 @bp.route('/profile', methods = ['GET', 'POST', 'PATCH'])
