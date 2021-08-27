@@ -16,7 +16,7 @@ const Award = () => {
     const requestUserAward = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/award`,
+          `${process.env.REACT_APP_BASE_URL}/api/award`,
           { headers: authHeader() }
         );
         setAwardList(response.data);

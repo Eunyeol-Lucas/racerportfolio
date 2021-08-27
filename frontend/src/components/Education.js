@@ -17,7 +17,7 @@ const Education = () => {
     const requestUserEdu = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/education`,
+          `${process.env.REACT_APP_BASE_URL}/api/education`,
           { headers: authHeader() }
         );
         setEducationList(response.data);

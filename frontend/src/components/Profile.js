@@ -19,7 +19,7 @@ export default function Mainpage() {
     const request_profile = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/profile`,
+          `${process.env.REACT_APP_BASE_URL}/api/profile`,
           { headers: authHeader() }
         );
         setFile({

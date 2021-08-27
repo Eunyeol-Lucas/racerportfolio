@@ -36,7 +36,7 @@ export default function Network() {
   useEffect(() => {
     (async function () {
       const response = await axios.get(
-        `${process.env.REACT_APP_BASE_URL}/profile/users`,
+        `${process.env.REACT_APP_BASE_URL}/api/profile/users`,
         { headers: authHeader() }
       );
       setTotalCardCount(response.data.length);

@@ -19,7 +19,7 @@ export default function LoginPage  () {
       password,
     };
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}/login`, body)
+      .post(`${process.env.REACT_APP_BASE_URL}/api/login`, body)
       .then((res) => {
         console.log(res);
         if (res.status === 200) {

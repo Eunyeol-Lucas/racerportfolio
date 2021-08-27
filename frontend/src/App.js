@@ -31,7 +31,7 @@ function App() {
           )}
         </Navi>
       </Container>
-      <Route component={LoginPage} path="/login" />
+      <Route component={LoginPage} exact path={["/login", "/"]} />
       <Route component={RegisterPage} path="/register" />
       <PrivateRoute component={Network} path="/network" />
       <PrivateRoute exact component={Main} path="/main" />

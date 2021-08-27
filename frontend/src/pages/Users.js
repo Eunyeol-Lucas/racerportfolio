@@ -7,7 +7,6 @@ import ProfileList, {
   ProjectList,
   CertificateList,
 } from "../components/ListComponents";
-import * as Main from '../components/Components'
 import styled from "styled-components";
 
 export default function Users() {
@@ -23,7 +22,7 @@ export default function Users() {
     (async function () {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/profile/users/${user_id}`,
+          `${process.env.REACT_APP_BASE_URL}/api/profile/users/${user_id}`,
           { headers: authHeader() }
         );
         setProfile(response.data.users);

@@ -18,7 +18,7 @@ const Project = () => {
     const requestUserProject = async () => {
       try {
         const response = await axios.get(
-          `${process.env.REACT_APP_BASE_URL}/project`,
+          `${process.env.REACT_APP_BASE_URL}/api/project`,
           { headers: authHeader() }
         );
         setProjectList(response.data);

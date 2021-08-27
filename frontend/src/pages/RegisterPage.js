@@ -82,16 +82,15 @@ const RegisterPage = (props) => {
       password,
     };
     console.log(body);
-    axios
-      .post(`http://localhost:5000/register`, body)
-      .then((res) => {
-        console.log(res);
-        if (res.data.result === "fail") {
-          setIdValidate(false)
-        } else
-          {alert("회원 가입에 성공하셨습니다.");
-        history.push('/login');}
-      })
+    axios.post(`http://localhost:5000/api/register`, body).then((res) => {
+      console.log(res);
+      if (res.data.result === "fail") {
+        setIdValidate(false);
+      } else {
+        alert("회원 가입에 성공하셨습니다.");
+        history.push("/login");
+      }
+    });
   }
 
   return (
