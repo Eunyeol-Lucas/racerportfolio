@@ -94,7 +94,7 @@ const RegisterPage = (props) => {
   }
 
   return (
-      <Register.Container large >
+    <Register.Container large>
       <form onSubmit={onSubmit}>
         <Register.InputBlock>
           <Register.Label htmlFor="id">ID</Register.Label>
@@ -106,10 +106,14 @@ const RegisterPage = (props) => {
             placeholder="ID"
           />
           {!idCheck && (
-            <WarningP style={{ color: "red" }}>Email 형식으로 입력해주세요.</WarningP>
+            <WarningP style={{ color: "red" }}>
+              Email 형식으로 입력해주세요.
+            </WarningP>
           )}
           {!idValidate && (
-            <WarningP style={{ color: "red" }}>중복된 아이디가 존재합니다.</WarningP>
+            <WarningP style={{ color: "red" }}>
+              중복된 아이디가 존재합니다.
+            </WarningP>
           )}
         </Register.InputBlock>
         <Register.InputBlock>
@@ -118,7 +122,7 @@ const RegisterPage = (props) => {
             name="password"
             type="password"
             value={password}
-            placeholder="ID"
+            placeholder="PASSWORD"
             required
             onChange={onChangePassword}
           />
@@ -136,11 +140,14 @@ const RegisterPage = (props) => {
             name="password-check"
             type="password"
             value={passwordCheck}
+            placeholder="PASSWORD CHECK"
             required
             onChange={onChangePasswordChk}
           />
           {passwordError && (
-            <WarningP style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</WarningP>
+            <WarningP style={{ color: "red" }}>
+              비밀번호가 일치하지 않습니다.
+            </WarningP>
           )}
         </Register.InputBlock>
         <Register.InputBlock>
@@ -148,7 +155,7 @@ const RegisterPage = (props) => {
           <Register.Inputbox
             name="username"
             value={username}
-            placeholder="Enter your Name"
+            placeholder="YOUR NAME"
             required
             onChange={onChangeUsername}
           />
@@ -160,7 +167,9 @@ const RegisterPage = (props) => {
         </Register.InputBlock>
         <div>
           <p>
-            <Register.Button large type="submit">회원가입</Register.Button>
+            <Register.Button large type="submit">
+              회원가입
+            </Register.Button>
           </p>
         </div>
       </form>

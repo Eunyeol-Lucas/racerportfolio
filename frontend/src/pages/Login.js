@@ -29,8 +29,8 @@ export default function LoginPage  () {
             "access_token",
             JSON.stringify(res.data.access_token)
           );
-          window.location.replace("/");
           history.push('/main');
+          window.location.replace("/");
           alert("로그인에 성공하였습니다.");
         }
       })
