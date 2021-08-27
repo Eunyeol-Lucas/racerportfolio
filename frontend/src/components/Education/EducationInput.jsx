@@ -1,5 +1,7 @@
-import React, { useState } from "react";
-
+import React from "react";
+import * as Main from '../Components'
+import { BiSave } from "react-icons/bi";
+import { GiCancel } from "react-icons/gi";
 export default function EducationInput({
   educationList,
   setSchool,
@@ -10,13 +12,14 @@ export default function EducationInput({
 }) {
   return (
     <div>
+      <h2>학력</h2>
       <div>
         {educationList &&
           educationList.map((education, idx) => (
             <div key={`edu-${idx}`}>
               <form>
                 <p>
-                  <input
+                  <Main.UserInput
                     type="text"
                     name="name"
                     onChange={(e) => setSchool(e.target.value)}
@@ -25,7 +28,7 @@ export default function EducationInput({
                   />
                 </p>
                 <p>
-                  <input
+                  <Main.UserInput
                     type="text"
                     name="major"
                     onChange={(e) => setMajor(e.target.value)}
@@ -72,14 +75,14 @@ export default function EducationInput({
                   <label htmlFor="04">박사졸업</label>
                 </div>
               </form>
-              <hr />
+              <Main.Hr />
             </div>
           ))}
       </div>
       <div>
         <form onSubmit={onSubmit}>
           <p>
-            <input
+            <Main.UserInput
               type="text"
               name="name"
               onChange={(e) => setSchool(e.target.value)}
@@ -88,7 +91,7 @@ export default function EducationInput({
             />
           </p>
           <p>
-            <input
+            <Main.UserInput
               type="text"
               name="major"
               onChange={(e) => setMajor(e.target.value)}
@@ -132,10 +135,10 @@ export default function EducationInput({
             />
             <label htmlFor="04">박사졸업</label>
           </div>
-          <button type="submit">저장하기</button>
+          <Main.TransButton type="submit"><BiSave /></Main.TransButton>
         </form>
       </div>
-      <button onClick={() => setIsToggle(true)}>돌아가기</button>
+      <Main.TransButton onClick={() => setIsToggle(true)}><GiCancel /></Main.TransButton>
     </div>
   );
 }

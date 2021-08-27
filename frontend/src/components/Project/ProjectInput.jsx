@@ -1,7 +1,7 @@
 import React from "react";
-import DatePicker from "react-datepicker";
-
-import "react-datepicker/dist/react-datepicker.css";
+import * as Main from '../Components'
+import { GiCancel } from "react-icons/gi";
+import { BiSave } from "react-icons/bi";
 
 export default function ProjectInput({
   setTitle,
@@ -16,13 +16,14 @@ export default function ProjectInput({
 }) {
   return (
     <div>
+      <h2>프로젝트</h2>
       <div>
         {projectList &&
           projectList.map((award, idx) => (
             <div key={`award-${idx}`}>
               <form>
                 <p>
-                  <input
+                  <Main.UserInput
                     type="text"
                     name="title"
                     onChange={(e) => setTitle(e.target.value)}
@@ -31,7 +32,7 @@ export default function ProjectInput({
                   />
                 </p>
                 <p>
-                  <input
+                  <Main.UserInput
                     type="text"
                     name="description"
                     onChange={(e) => setContent(e.target.value)}
@@ -55,13 +56,13 @@ export default function ProjectInput({
                   required="required"
                 />
               </form>
-              <hr />
+              <Main.Hr />
             </div>
           ))}
       </div>
       <form onSubmit={onSubmit}>
         <p>
-          <input
+          <Main.UserInput
             type="text"
             name="title"
             placeholder="프로젝트 명"
@@ -70,7 +71,7 @@ export default function ProjectInput({
           />
         </p>
         <p>
-          <input
+          <Main.UserInput
             type="text"
             name="content"
             placeholder="상세 내역"
@@ -78,28 +79,28 @@ export default function ProjectInput({
             required="required"
           />
         </p>
-
-        <DatePicker
-          selected={startDate}
-          name="start_date"
-          dateFormat="yyyy-MM-dd"
-          closeOnScroll={true}
-          onChange={(date) => setStartDate(date)}
-          required="required"
-        />
-        <DatePicker
-          selected={endDate}
-          name="end_date"
-          dateFormat="yyyy-MM-dd"
-          closeOnScroll={true}
-          onChange={(date) => setEndDate(date)}
-          required="required"
-        />
-
-        <button type="submit">저장</button>
+        <p>
+          <input
+            type="date"
+            name="startDate"
+            onChange={(e) => setStartDate(e.target.value)}
+            required="required"
+          />
+          <input
+            type="date"
+            name="endDate"
+            onChange={(e) => setEndDate(e.target.value)}
+            required="required"
+          />
+        </p>
+        <Main.TransButton type="submit">
+          <BiSave />
+        </Main.TransButton>
       </form>
 
-      <button onClick={() => setIsToggle(true)}>돌아가기</button>
+      <Main.TransButton onClick={() => setIsToggle(true)}>
+        <GiCancel />
+      </Main.TransButton>
     </div>
   );
 }

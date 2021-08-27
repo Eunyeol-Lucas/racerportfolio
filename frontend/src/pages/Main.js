@@ -1,26 +1,37 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import styled, { css } from "styled-components";
 import {
   Award,
   Certificate,
   Education,
   Profile,
   Project,
-} from '../components/allComponents'
+} from "../components/allComponents";
 
 const Main = () => {
-//   const isLogin = useSelector((state) => state.auth);
-//   console.log(isLogin);
   return (
-    <div>
-      <h1> Main </h1>
+    <Container>
       <Profile />
-      <Education />
-      <Award />
-      <Project />
-      <Certificate />
-    </div>
+      <div>
+        <Education />
+        <Award />
+        <Project />
+        <Certificate />
+      </div>
+    </Container>
   );
 };
 
 export default Main;
+
+const Container = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  padding: 0;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 1300px;
+  justify-content: space-around;
+  top: 50px;
+`;

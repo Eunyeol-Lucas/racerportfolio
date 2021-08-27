@@ -1,4 +1,7 @@
 import React from "react";
+import * as Main from '../Components'
+import { BiSave } from "react-icons/bi";
+import { GiCancel } from "react-icons/gi";
 
 export default function AwardInput({
   awardName,
@@ -11,13 +14,14 @@ export default function AwardInput({
 }) {
   return (
     <div>
+      <h2>수상이력</h2>
       <div>
         {awardList &&
           awardList.map((award, idx) => (
             <div key={idx}>
               <form>
                 <p>
-                  <input
+                  <Main.UserInput
                     key={`${idx}-${award.name}`}
                     type="text"
                     name="name"
@@ -26,7 +30,7 @@ export default function AwardInput({
                   />
                 </p>
                 <p>
-                  <input
+                  <Main.UserInput
                     key={`${idx}-${award.description}`}
                     type="text"
                     name="description"
@@ -35,14 +39,14 @@ export default function AwardInput({
                   />
                 </p>
               </form>
-              <hr />
+              <Main.Hr />
             </div>
           ))}
       </div>
       <div>
         <form onSubmit={onSubmit}>
           <p>
-            <input
+            <Main.UserInput
               type="text"
               name="name"
               onChange={(e) => setAwardName(e.target.value)}
@@ -51,7 +55,7 @@ export default function AwardInput({
             />
           </p>
           <p>
-            <input
+            <Main.UserInput
               type="text"
               name="description"
               onChange={(e) => setAwardDescription(e.target.value)}
@@ -59,11 +63,13 @@ export default function AwardInput({
               required="required"
             />
           </p>
-          <button type="submit">저장</button>
+          <Main.TransButton type="submit"><BiSave /></Main.TransButton>
         </form>
       </div>
 
-      <button onClick={() => setIsToggle(true)}>돌아가기</button>
+      <Main.TransButton onClick={() => setIsToggle(true)}><GiCancel /></Main.TransButton>
     </div>
   );
 }
+
+  

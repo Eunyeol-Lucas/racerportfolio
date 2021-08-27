@@ -8,18 +8,6 @@ export default async function tokenCheck(url) {
       headers: authHeader(),
     });
     console.log("response", response);
-    const image = (response) => {
-      let image = btoa(
-        new Uint8Array(response.data.image).reduce(
-          (data, byte) => data + String.fromCharCode(byte),
-          ""
-        )
-      );
-      return `data:${response.headers[
-        "content-type"
-      ].toLowerCase()};base64,${image}`;
-    }
-    console.log(image(response))
 
   } catch (error) {
     console.log("error.response", error.response);

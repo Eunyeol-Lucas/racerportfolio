@@ -1,7 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { BiSave } from "react-icons/bi";
-import { Button } from "./ProfileList";
+import * as Main from '../Components'
+
 
 
 export default function ProfileUpload({
@@ -15,6 +16,7 @@ export default function ProfileUpload({
 }) {
   return (
     <div>
+      <h2>프로필</h2>
       <p>
         <label className="input-file-button" htmlFor="input-file">
           <Img src={file.file} alt="#" />
@@ -43,9 +45,9 @@ export default function ProfileUpload({
             defaultValue={introduction}
           />
         </p>
-        <Button type="submit">
+        <Main.TransButton type="submit">
           <BiSave />
-        </Button>
+        </Main.TransButton>
       </form>
     </div>
   );

@@ -1,5 +1,7 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
+import * as Register from './Cordinate';
+import styled from "styled-components";
 //회원가입 page
 const RegisterPage = (props) => {
   const [id, setId] = useState("");
@@ -93,42 +95,45 @@ const RegisterPage = (props) => {
   }
 
   return (
-    <div>
+      <Register.Container large >
       <form onSubmit={onSubmit}>
-        <div>
-          <label htmlFor="id">아이디</label>
-          <input
+        <Register.InputBlock>
+          <Register.Label htmlFor="id">ID</Register.Label>
+          <Register.Inputbox
             name="id"
             value={id}
             required
             onChange={onChangeId}
-            placeholder="abc@email.com"
+            placeholder="ID"
           />
           {!idCheck && (
-            <div style={{ color: "red" }}>ID 형식이 유효하지 않습니다.</div>
+            <WarningP style={{ color: "red" }}>Email 형식으로 입력해주세요.</WarningP>
           )}
           {!idValidate && (
-            <div style={{ color: "red" }}>중복된 아이디가 존재합니다.</div>
+            <WarningP style={{ color: "red" }}>중복된 아이디가 존재합니다.</WarningP>
           )}
-        </div>
-        <div>
-          <label htmlFor="password">비밀번호</label>
-          <input
+        </Register.InputBlock>
+        <Register.InputBlock>
+          <Register.Label htmlFor="password">PASSWORD</Register.Label>
+          <Register.Inputbox
             name="password"
             type="password"
             value={password}
+            placeholder="ID"
             required
             onChange={onChangePassword}
           />
           {!passwordVali && (
-            <div style={{ color: "red" }}>
-              영문, 숫자, 특수문자 중 2종류 이상을 조합하여 최소 10자리 이상
-            </div>
+            <WarningP style={{ color: "red" }}>
+              영문, 숫자, 특수문자 조합 10자리 이상
+            </WarningP>
           )}
-        </div>
-        <div>
-          <label htmlFor="password-check">비밀번호 확인</label>
-          <input
+        </Register.InputBlock>
+        <Register.InputBlock>
+          <Register.Label htmlFor="password-check">
+            PASSWORD CHECK
+          </Register.Label>
+          <Register.Inputbox
             name="password-check"
             type="password"
             value={passwordCheck}
@@ -136,31 +141,36 @@ const RegisterPage = (props) => {
             onChange={onChangePasswordChk}
           />
           {passwordError && (
-            <div style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</div>
+            <WarningP style={{ color: "red" }}>비밀번호가 일치하지 않습니다.</WarningP>
           )}
-        </div>
-        <div>
-          <label htmlFor="username">이름</label>
-          <input
+        </Register.InputBlock>
+        <Register.InputBlock>
+          <Register.Label htmlFor="username">NAME</Register.Label>
+          <Register.Inputbox
             name="username"
             value={username}
+            placeholder="Enter your Name"
             required
             onChange={onChangeUsername}
           />
           {!usernameCheck && (
-            <div style={{ color: "red" }}>
+            <WarningP style={{ color: "red" }}>
               한글 또는 영문으로만 입력이 가능합니다.
-            </div>
+            </WarningP>
           )}
-        </div>
+        </Register.InputBlock>
         <div>
           <p>
-            <button type="submit">가입하기</button>
+            <Register.Button large type="submit">회원가입</Register.Button>
           </p>
         </div>
       </form>
-    </div>
+    </Register.Container>
   );
 };
 
 export default RegisterPage;
+
+const WarningP = styled.p`
+  margin-bottom: 0;
+`

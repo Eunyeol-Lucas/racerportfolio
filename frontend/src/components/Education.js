@@ -3,7 +3,8 @@ import EducationInput from "./Education/EducationInput";
 import EducationList from "./Education/EducationList";
 import axios from "axios";
 import authHeader from "../modules/authHeader";
-import styled from "styled-components";
+import { BiEditAlt } from "react-icons/bi";
+import * as Main from "./Components"
 
 const Education = () => {
   const [educationList, setEducationList] = useState([]);
@@ -19,10 +20,13 @@ const Education = () => {
           `${process.env.REACT_APP_BASE_URL}/education`,
           { headers: authHeader() }
         );
-        console.log(response);
         setEducationList(response.data);
       } catch (err) {
         console.log(err.response);
+        if (err.response.status === 401) {
+          alert("토큰이 만료되었습니다.");
+          window.localStorage.removeItem("access_token");
+        }
       }
     };
     requestUserEdu();
@@ -50,13 +54,15 @@ const Education = () => {
   };
 
   return (
-    <Container>
-      <h2>학력</h2>
+    <Main.Container>
       {isToggle ? (
-        <EducationList
-          educationList={educationList}
-          setIsToggle={setIsToggle}
-        />
+        <div>
+          <EducationList
+            educationList={educationList}
+            setIsToggle={setIsToggle}
+          />
+          <Main.TransButton onClick={() => setIsToggle(false)}><BiEditAlt /></Main.TransButton>
+        </div>
       ) : (
         <EducationInput
           educationList={educationList}
@@ -67,12 +73,10 @@ const Education = () => {
           setIsToggle={setIsToggle}
         />
       )}
-    </Container>
+    </Main.Container>
   );
 };
 
 export default Education;
 
-const Container = styled.div`
-  background-color: yellow;
-`;
+

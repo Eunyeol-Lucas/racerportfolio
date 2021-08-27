@@ -32,6 +32,9 @@ SearchTextField.defaultProps = {
   onChange: () => {},
 };
 
+// Debounce를 이용하여 검색창 API호출 지연시킴
+// 검색창 값이 바뀔 때 마다 API호출을 하면 너무많은 요청을 보내기 때문에 서버에 과부화가 걸릴 수 있다. 
+// 웹클라이언트에서 debounce를 이용하여서 요청 보내는 횟수를 적절히 조절
 function debounce(func, timeout) {
   let timer;
   return (...args) => {
@@ -42,14 +45,14 @@ function debounce(func, timeout) {
   };
 }
 
-export default function SearchTextField({ value, onChange }) {
-  const debouncedOnChange = debounce(onChange, 500);
-
+// 네트워크 검색창 기능
+export default function SearchTextField({setSearch }) {
+  const debouncedOnChange = debounce(setSearch, 300);
   return (
     <Container>
       <MagnifyingGlass />
       <Input
-        placeholder="이름으로 검색."
+        placeholder="이름으로 검색하기"
         onChange={(e) => {
           debouncedOnChange(e.target.value);
         }}

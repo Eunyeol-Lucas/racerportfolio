@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import AwardList from "./Award/AwardList";
 import AwardInput from "./Award/AwardInput";
-import styled from "styled-components";
 import axios from "axios";
 import authHeader from "../modules/authHeader";
+import * as Main from './Components';
+import { BiEditAlt } from "react-icons/bi";
 
 const Award = () => {
   const [awardList, setAwardList] = useState([]);
@@ -18,10 +19,13 @@ const Award = () => {
           `${process.env.REACT_APP_BASE_URL}/award`,
           { headers: authHeader() }
         );
-        console.log(response);
         setAwardList(response.data);
       } catch (err) {
         console.log(err.response);
+        if (err.response.status === 401) {
+          alert("토큰이 만료되었습니다.");
+          window.localStorage.removeItem("access_token");
+        }
       }
     };
     requestUserAward();
@@ -30,7 +34,10 @@ const Award = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     console.log(awardName, awardDescription);
-    if (awardName === "" || awardDescription === "") { setIsToggle(true); return;}
+    if (awardName === "" || awardDescription === "") {
+      setIsToggle(true);
+      return;
+    }
     const body = { name: awardName, description: awardDescription };
     try {
       const response = await axios.post(
@@ -39,19 +46,18 @@ const Award = () => {
         { headers: authHeader() }
       );
       console.log(response);
-      setIsToggle(true)
+      setIsToggle(true);
     } catch (err) {
       console.log(err.response);
     }
   };
 
   return (
-    <Container>
-      <h2>수상이력</h2>
+    <Main.Container>
       {isToggle ? (
         <div>
           <AwardList awardList={awardList} setIsToggle={setIsToggle} />
-          <button onClick={() => setIsToggle(false)}>수정하기</button>
+          <Main.TransButton onClick={() => setIsToggle(false)}><BiEditAlt /></Main.TransButton>
         </div>
       ) : (
         <AwardInput
@@ -64,12 +70,8 @@ const Award = () => {
           setIsToggle={setIsToggle}
         />
       )}
-    </Container>
+    </Main.Container>
   );
 };
 
 export default Award;
-
-const Container = styled.div`
-  background-color: orange;
-`;

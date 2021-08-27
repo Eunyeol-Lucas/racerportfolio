@@ -1,20 +1,13 @@
 import React from "react";
-import { BiEditAlt } from "react-icons/bi";
 import styled from "styled-components";
 
-export default function ProfileList({ file, username, introduction, setIsToggle }) {
+export default function ProfileList({ file, username, introduction }) {
   return (
     <div>
+      <h2>프로필</h2>
       <Img src={file.file} alt="#" />
-      <p>{username}</p>
-      <p>{introduction}</p>
-      <Button
-        onClick={() => {
-          setIsToggle(false);
-        }}
-      >
-        <BiEditAlt />
-      </Button>
+      <h3>{username}</h3>
+      <h4>{introduction}</h4>
     </div>
   );
 }
@@ -23,20 +16,7 @@ const Img = styled.img`
   width: 100px;
   height: 100px;
   border-radius: 50%;
-  border: 1px solid white;
+  border: none;
   background-color: yellow;
 `;
 
-export const Button = styled.button`
-  border: none;
-  outline: 0;
-  background-color: transparent;
-  font-size: 25px;
-
-  &:hover {
-    top: 20px;
-    left: 20px;
-    color: gray;
-    cursor: pointer;
-  }
-`;

@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import CertificateList from "./Certificate/CertificateList";
 import CertificateInput from "./Certificate/CertificateInput";
-import styled from "styled-components";
 import axios from "axios";
 import authHeader from "../modules/authHeader";
+import * as Main from './Components'
+import { BiEditAlt } from "react-icons/bi";
 
 const Certificate = () => {
   const [certificateList, setCertificateList] = useState([]);
@@ -19,10 +20,13 @@ const Certificate = () => {
           `${process.env.REACT_APP_BASE_URL}/certificate`,
           { headers: authHeader() }
         );
-        console.log(response);
         setCertificateList(response.data);
       } catch (err) {
         console.log(err.response);
+        if (err.response.status === 401) {
+          alert("토큰이 만료되었습니다.");
+          window.localStorage.removeItem("access_token");
+        }
       }
     };
     requestUserEdu();
@@ -50,12 +54,11 @@ const Certificate = () => {
   };
 
   return (
-    <Container>
-      <h2>자격증</h2>
+    <Main.Container>
       {isToggle ? (
         <div>
           <CertificateList certificateList={certificateList} />
-          <button onClick={() => setIsToggle(false)}>수정하기</button>
+          <Main.TransButton onClick={() => setIsToggle(false)}><BiEditAlt /></Main.TransButton>
         </div>
       ) : ( 
         <CertificateInput
@@ -67,12 +70,10 @@ const Certificate = () => {
           setIsToggle={setIsToggle}
         />
       )}
-    </Container>
+    </Main.Container>
   );
 };
 
 export default Certificate;
 
-const Container = styled.div`
-  background-color: gray;
-`;
+

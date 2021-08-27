@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import styled from "styled-components";
 import ProjectList from "./Project/ProjectList";
 import ProjectInput from "./Project/ProjectInput";
 import axios from "axios";
 import authHeader from "../modules/authHeader";
+import * as Main from './Components'
+import { BiEditAlt } from "react-icons/bi";
 
 const Project = () => {
   const [title, setTitle] = useState("");
@@ -20,24 +21,22 @@ const Project = () => {
           `${process.env.REACT_APP_BASE_URL}/project`,
           { headers: authHeader() }
         );
-        console.log(response);
         setProjectList(response.data);
       } catch (err) {
         console.log(err.response);
+        if (err.response.status === 401) {
+          alert("토큰이 만료되었습니다.");
+          window.localStorage.removeItem("access_token");
+        }
       }
     };
     requestUserProject();
   }, [isToggle]);
 
-  useEffect(() => {
-    console.log(startDate);
-  }, [startDate]);
-
   const onSubmit = async (e) => {
     e.preventDefault();
 
     const body = { title, content, startDate, endDate };
-    console.log(body);
     try {
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/project`,
@@ -52,12 +51,11 @@ const Project = () => {
   };
 
   return (
-    <Container>
-      <h2>프로젝트</h2>
+    <Main.Container>
       {isToggle ? (
         <div>
           <ProjectList projectList={projectList} />
-          <button onClick={() => setIsToggle(false)}>수정하기</button>
+          <Main.TransButton onClick={() => setIsToggle(false)}><BiEditAlt /></Main.TransButton>
         </div>
       ) : (
         <ProjectInput
@@ -72,12 +70,9 @@ const Project = () => {
           setIsToggle={setIsToggle}
         />
       )}
-    </Container>
+    </Main.Container>
   );
 };
 
 export default Project;
 
-const Container = styled.div`
-  background-color: green;
-`;

@@ -1,25 +1,29 @@
 import * as Card from "./Card.js";
-
-UserCard.defaultProps = {
-  profile_image: "default.png",
-  username:
-   "김아무개1",
-  introduction: "엘리서 소개",
-};
+import { useHistory } from "react-router";
 
 export default function UserCard({
   profile_image,
   username,
   introduction,
+  id,
 }) {
-  // Card에 담겨져있는 컴포넌트들을 조합하여 트랙카드를 만드세요
+  
+  const history = useHistory()
+  const Move = () => {
+    history.push(`/main/user/${id}`)
+  }
   return (
-    <Card.Container large>
+    <Card.Container>
       <Card.Corner />
-      <Card.TrackCardIcon src={profile_image} alt={profile_image} />
-      <Card.Title large>{username}</Card.Title>
-      <Card.Description large>{introduction}</Card.Description>
-      <button>정보 보기</button>
+      <Card.UserCardIcon
+        src={`${process.env.REACT_APP_BASE_URL}/${profile_image}`}
+        alt={profile_image}
+      />
+      <Card.Username>{username}</Card.Username>
+      <Card.Introduction>{introduction}</Card.Introduction>
+      
+      <Card.Button onClick={Move}>정보 보기</Card.Button>
+      
     </Card.Container>
   );
 }

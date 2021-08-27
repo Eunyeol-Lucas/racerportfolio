@@ -1,9 +1,13 @@
 import axios from "axios";
-import React from 'react';
+import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Pagination, UserCount, UserCard, SearchTextField } from "../networkComponents/allNetworkComponents";
-
+import {
+  UserCount,
+  UserCard,
+  SearchTextField,
+} from "../networkComponents/allNetworkComponents";
+import authHeader from "../modules/authHeader";
 
 const Container = styled.div`
   display: flex;
@@ -15,60 +19,55 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const
-    UserContainer = styled.div`
+const UserContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(3, 398px);
   grid-column-gap: 19px;
   grid-row-gap: 32px;
 `;
 
+export default function Network() {
 
-export default function  Network() {
-  const [searchValue, setSearchValue] = useState("");
-  const [currPage, setCurrPage] = useState(0);
   const [cardData, setCardData] = useState([]);
   const [totalCardCount, setTotalCardCount] = useState(0);
+  const [search, setSearch] = useState("");
 
-
-
-  const handleChangeSearch = (val) => {
-    setSearchValue(val);
-  };
 
   useEffect(() => {
     (async function () {
-        const API_END_POINT = "https://api-beta.elicer.io:6664/org/academy/";
-
-        const offset = currPage * 6;
-        const filterConditions = searchValue
-          
-          ? `filter_conditions=${JSON.stringify({ title: searchValue })}&`
-          : "";
-
-        const trackUrl = `${API_END_POINT}track/list/?${filterConditions}offset=${offset}&count=6`;
-        const response = await axios.get(trackUrl);
-
-        setTotalCardCount(response.data.track_count);
-        setCardData(response.data.tracks);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/profile/users`,
+        { headers: authHeader() }
+      );
+      setTotalCardCount(response.data.length);
+      setCardData(response.data);
     })();
-  }, [searchValue, currPage]);
+  }, [search]);
 
   return (
     <Container>
-      <SearchTextField value={searchValue} onChange={handleChangeSearch} />
+      <SearchTextField search={search} setSearch={setSearch} />
       <UserCount count={totalCardCount} />
-        <UserContainer>
-          {cardData.map((track, i) => (
-            <UserCard title={track.title} key={`track-card-${i}`} />
-          ))}
-        </UserContainer>
-    
-      <Pagination
-        currPage={currPage}
-        pageCount={Math.ceil(totalCardCount / 6)}
-        onClickPage={setCurrPage}
-      />
+      <UserContainer>
+        {cardData.filter((data) => {
+          if (search === null) {
+            return data
+          } 
+          else if (data.username.includes(search)) {
+            return data
+          }
+          return false;
+        })
+          .map((user, i) => (
+          <UserCard
+            profile_image={user.profile_image}
+            username={user.username}
+            introduction={user.introduction}
+            id = {user.id}
+            key={`user-card-${i}`}
+          />
+        ))}
+      </UserContainer>
     </Container>
   );
 }
