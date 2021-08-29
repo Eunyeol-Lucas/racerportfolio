@@ -5,6 +5,7 @@
 instance/*
 !instance/.gitignore
 .webassets-cache
+static/
 
 
 ### Flask.Python Stack ###
@@ -222,5 +223,7 @@ bower_components
 psd
 thumb
 sketch
+
+.env.development
 
 # End of https://www.toptal.com/developers/gitignore/api/python,react,flask
