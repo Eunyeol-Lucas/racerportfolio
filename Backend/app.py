@@ -18,7 +18,7 @@ def create_app():
 
     
 
-    from apis import profile, register, login, education, certificates, awards, projects
+    from views import profile, register, login, education, certificates, awards, projects
 
     app.register_blueprint(profile.bp)
     app.register_blueprint(register.bp)

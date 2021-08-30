@@ -29,97 +29,79 @@ CREATE TABLE `alembic_version` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Awards`
+-- Table structure for table `awards`
 --
 
-DROP TABLE IF EXISTS `Awards`;
+DROP TABLE IF EXISTS `awards`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Awards` (
+CREATE TABLE `awards` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `awards` varchar(255) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `awards_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `awards_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Certificates`
+-- Table structure for table `certificates`
 --
 
-DROP TABLE IF EXISTS `Certificates`;
+DROP TABLE IF EXISTS `certificates`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Certificates` (
+CREATE TABLE `certificates` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `name` varchar(100) NOT NULL,
   `certified_by` varchar(100) NOT NULL,
-  `certified_date` date NOT NULL,
+  `certified_date` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `certificates_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `certificates_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Education`
+-- Table structure for table `educations`
 --
 
-DROP TABLE IF EXISTS `Education`;
+DROP TABLE IF EXISTS `educations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Education` (
+CREATE TABLE `educations` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `school` varchar(100) NOT NULL,
   `major` varchar(100) NOT NULL,
-  `state` int DEFAULT NULL,
+  `status` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `education_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `educations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `Profile`
+-- Table structure for table `projects`
 --
 
-DROP TABLE IF EXISTS `Profile`;
+DROP TABLE IF EXISTS `projects`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Profile` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `user_id` int NOT NULL,
-  `profile_image` varchar(100) DEFAULT NULL,
-  `introduction` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `user_id` (`user_id`),
-  CONSTRAINT `profile_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `Projects`
---
-
-DROP TABLE IF EXISTS `Projects`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Projects` (
+CREATE TABLE `projects` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `title` varchar(255) NOT NULL,
   `content` varchar(255) NOT NULL,
-  `start_date` date NOT NULL,
-  `end_date` date NOT NULL,
+  `start_date` varchar(100) NOT NULL,
+  `end_date` varchar(100) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `projects_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -134,9 +116,11 @@ CREATE TABLE `user` (
   `username` varchar(32) NOT NULL,
   `userid` varchar(100) NOT NULL,
   `password` varchar(64) NOT NULL,
+  `profile_image` text NOT NULL,
+  `introduction` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `userid` (`userid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -148,4 +132,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-08-18 16:08:05
+-- Dump completed on 2021-08-27 16:28:28
