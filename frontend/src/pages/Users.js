@@ -8,6 +8,7 @@ import ProfileList, {
   CertificateList,
 } from "../components/ListComponents";
 import styled from "styled-components";
+import TokenCheck from "../modules/authToken";
 
 export default function Users() {
   const [profile, setProfile] = useState("");
@@ -16,6 +17,8 @@ export default function Users() {
   const [awardList, setAwardList] = useState([]);
   const [projectList, setProjectList] = useState([]);
   const [certificateList, setCertificateList] = useState([]);
+  const [checkToken, setCheckToken] = useState(false);
+
   const user_id = window.location.href.split("/")[5];
 
   useEffect(() => {
@@ -40,19 +43,22 @@ export default function Users() {
   }, []);
 
   return (
-    <Container>
-      <ProfileList
-        file={file}
-        username={profile.username}
-        introduction={profile.introduction}
-      />
-      <div>
-        <EducationList educationList={educationList} />
-        <AwardList awardList={awardList} />
-        <ProjectList projectList={projectList} />
-        <CertificateList certificateList={certificateList} />
-      </div>
-    </Container>
+    <>
+      <TokenCheck setCheckToken={setCheckToken} checkToken={checkToken} />
+      <Container>
+        <ProfileList
+          file={file}
+          username={profile.username}
+          introduction={profile.introduction}
+        />
+        <div>
+          <EducationList educationList={educationList} />
+          <AwardList awardList={awardList} />
+          <ProjectList projectList={projectList} />
+          <CertificateList certificateList={certificateList} />
+        </div>
+      </Container>
+    </>
   );
 }
 
@@ -65,6 +71,6 @@ const Container = styled.div`
   margin-right: auto;
   max-width: 1300px;
   justify-content: space-around;
-  top: 50px;
+  top: 100px;
 `;
 

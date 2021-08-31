@@ -54,13 +54,15 @@ export default function ProfileUpload({
 }
 
 const Img = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 125px;
+  height: 125px;
   border-radius: 50%;
   border: 1px solid white;
-  background-color: yellow;
+  background-color: #f2f2f2;
+  box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
+    0 3px 7px -3px rgba(0, 0, 0, 0.3);
   &:hover {
-      cursor: pointer;
+    cursor: pointer;
   }
 `;
 
@@ -70,6 +72,7 @@ const Input = styled.input`
   color: black;
   text-align: center;
   width: 150px;
+  padding-top: 2px;
   &:hover {
       cursor: pointer;
   }

@@ -9,6 +9,7 @@ body {
   box-sizing: border-box;
   min-height: 100%;
   background-color: #eff3f7;
+  scroll-behavior: smooth;
 }
 
 #root {
@@ -26,9 +27,36 @@ a {
 
 * {
   box-sizing: inherit;
+  padding: 0;
+  margin: 0;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+h1 {
+  margin: 10px 0;
+}
+
+h2 {
+  margin: 7.5px 0;
+}
+
+h3 {
+  margin: 5px 0;
+}
+
+h4 {
+  margin: 5px 0;
+}
+
+p {
+  margin: 5px 0;
+}
+
+input {
+  padding: 0 5px;
+  border-radius: 5px;
 }

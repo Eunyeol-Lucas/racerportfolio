@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 import ProjectList from "./Project/ProjectList";
 import ProjectInput from "./Project/ProjectInput";
 import axios from "axios";
@@ -6,13 +7,15 @@ import authHeader from "../modules/authHeader";
 import * as Main from './Components'
 import { BiEditAlt } from "react-icons/bi";
 
-const Project = () => {
+const Project = ({setCheckToken}) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [projectList, setProjectList] = useState([]);
   const [isToggle, setIsToggle] = useState(true);
+
+  const history = useHistory();
 
   useEffect(() => {
     const requestUserProject = async () => {
@@ -23,10 +26,11 @@ const Project = () => {
         );
         setProjectList(response.data);
       } catch (err) {
-        console.log(err.response);
         if (err.response.status === 401) {
-          alert("토큰이 만료되었습니다.");
-          window.localStorage.removeItem("access_token");
+          setCheckToken(true);
+          setTimeout(() => {
+            history.push("/logout");
+          }, 2000);
         }
       }
     };

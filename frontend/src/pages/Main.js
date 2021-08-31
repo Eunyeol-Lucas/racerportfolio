@@ -8,24 +8,25 @@ import {
   Profile,
   Project,
 } from "../components/allComponents";
+import TokenCheck from "../modules/authToken";
 
 const Main = () => {
-  const [status, setState] = useState(false);
-
-  useEffect(() => {
-    setState(!status);
-  }, [])
+  const [checkToken, setCheckToken] = useState(false);
+  
 
   return (
-    <Container>
-      <Profile />
-      <div>
-        <Education />
-        <Award />
-        <Project />
-        <Certificate />
-      </div>
-    </Container>
+    <>
+      <TokenCheck setCheckToken={setCheckToken} checkToken={checkToken} />
+      <Container>
+        <Profile setCheckToken={setCheckToken} />
+        <div>
+          <Education setCheckToken={setCheckToken} />
+          <Award setCheckToken={setCheckToken} />
+          <Project setCheckToken={setCheckToken} />
+          <Certificate setCheckToken={setCheckToken} />
+        </div>
+      </Container>
+    </>
   );
 };
 
@@ -40,5 +41,5 @@ const Container = styled.div`
   margin-right: auto;
   max-width: 1300px;
   justify-content: space-around;
-  top: 50px;
+  top: 100px;
 `;

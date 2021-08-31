@@ -5,14 +5,15 @@ import axios from "axios";
 import authHeader from "../modules/authHeader";
 import * as Main from './Components'
 import { BiEditAlt } from "react-icons/bi";
+import { useHistory } from "react-router-dom";
 
-const Certificate = () => {
+const Certificate = ({setCheckToken}) => {
   const [certificateList, setCertificateList] = useState([]);
   const [name, setName] = useState("");
   const [certified_by, setCertified_by] = useState("");
   const [certified_date, setCertified_date] = useState("");
   const [isToggle, setIsToggle] = useState(true);
-
+  const history = useHistory();
   useEffect(() => {
     const requestUserEdu = async () => {
       try {
@@ -22,10 +23,11 @@ const Certificate = () => {
         );
         setCertificateList(response.data);
       } catch (err) {
-        console.log(err.response);
         if (err.response.status === 401) {
-          alert("토큰이 만료되었습니다.");
-          window.localStorage.removeItem("access_token");
+          setCheckToken(true);
+          setTimeout(() => {
+            history.push("/logout");
+          }, 2000);
         }
       }
     };

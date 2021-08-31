@@ -6,13 +6,17 @@ import ProfileList from "./Profile/ProfileList";
 import ProfileUpload from "./Profile/ProfileUpload";
 import { BiEditAlt } from "react-icons/bi";
 import * as Main from "./Components";
+import { useHistory } from "react-router-dom";
+import { TokenExpire } from "../modules/authToken";
 
 // Racer 정보 및 수정 업로드 기능 page
-export default function Mainpage() {
+export default function Profile({ setCheckToken }) {
   const [file, setFile] = useState({ file: null });
   const [username, setUsername] = useState("");
   const [introduction, setIntroduction] = useState("");
   const [isToggle, setIsToggle] = useState(true);
+  const history = useHistory();
+
   //token 확인 및 유저 프로필 정보 요청
 
   useEffect(() => {
@@ -30,8 +34,10 @@ export default function Mainpage() {
       } catch (err) {
         console.log(err.response);
         if (err.response.status === 401) {
-          alert("토큰이 만료되었습니다.");
-          window.localStorage.removeItem("access_token");
+          setCheckToken(true);
+          setTimeout(() => {
+            history.push("/logout");
+          }, 2000);
         }
       }
     };
@@ -73,6 +79,12 @@ export default function Mainpage() {
       setIsToggle(true);
     } catch (err) {
       console.log(err.response);
+      if (err.response.status === 401) {
+        setCheckToken(true);
+        setTimeout(() => {
+          history.push("/logout");
+        }, 2000);
+      }
     }
   };
 
@@ -113,15 +125,15 @@ export default function Mainpage() {
 const Container = styled.div`
   position: sticky;
   margin: 0;
-  top: 170px;
+  top: 150px;
   display: flex;
   justify-content: center;
   text-align: center;
   align-items: center;
   background-color: white;
   margin: 0 auto 0;
-  width: 300px;
-  height: 400px;
+  width: 250px;
+  height: 350px;
   border-radius: 15px;
   box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
     0 3px 7px -3px rgba(0, 0, 0, 0.3);

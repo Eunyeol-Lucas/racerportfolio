@@ -17,26 +17,28 @@ export default function ProfileList({
 }
 
 const Img = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 125px;
+  height: 125px;
   border-radius: 50%;
   border: none;
-  background-color: yellow;
+  background-color: #f2f2f2;
+  box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
+    0 3px 7px -3px rgba(0, 0, 0, 0.3);
 `;
 
 const ProfileContainer = styled.div`
   position: sticky;
   margin: 0;
   padding-top: 50px;
-  top: 170px;
+  top: 150px;
   justify-content: center;
   text-align: center;
   align-items: center;
   align-content: center;
   background-color: white;
   margin: 0 auto 0;
-  width: 300px;
-  height: 400px;
+  width: 250px;
+  height: 350px;
   border-radius: 15px;
   box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
     0 3px 7px -3px rgba(0, 0, 0, 0.3);
@@ -141,8 +143,8 @@ const MainContainer = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 30px;
-  min-width: 700px;
-  min-height: 400px;
+  min-width: 40vw;
+  min-height: 10vw;
   border-radius: 15px;
   box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
     0 3px 7px -3px rgba(0, 0, 0, 0.3);

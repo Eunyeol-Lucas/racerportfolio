@@ -46,20 +46,23 @@ export default App;
 
 const Container = styled.header`
   display: flex;
-  position: sticky;
+  position: fixed;
   z-index: 999;
   top: 0;
   background-color: white;
   padding-right: 30px;
   padding-left: 30px;
-  height: 70px;
+  width: 100%;
+  height: 50px;
   text-align: center;
   align-items: center;
-  font-size: 25px;
-  min-width: 600px;
+  font-size: 20px;
+  @media only screen and (max-width: 550px) {
+    font-size: 15px;
+  }
   box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
     0 3px 7px -3px rgba(0, 0, 0, 0.3);
-    font-weight: 500;
+  font-weight: 700;
 `;
 
 const Navi = styled.ul`

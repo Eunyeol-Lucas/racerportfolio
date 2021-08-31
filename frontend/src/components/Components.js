@@ -10,15 +10,15 @@ export const Container = styled.div`
   margin-left: auto;
   margin-right: auto;
   margin-bottom: 30px;
-  min-width: 700px;
-  min-height: 400px;
+  min-width: 40vw;
+  min-height: 10vw;
   border-radius: 15px;
   box-shadow: 0 6px 12px -2px rgba(50, 50, 93, 0.25),
     0 3px 7px -3px rgba(0, 0, 0, 0.3);
 `;
 
 export const Hr = styled.hr`
-  width: 600px;
+  min-width: 34vw;
 `;
 export const MainP = styled.p`
   font-size: 18px;
@@ -26,7 +26,7 @@ export const MainP = styled.p`
 `;
 
 export const UserInput = styled.input`
-  width: 400px;
+  width: 27vw;
   height: 30px;
   font-size: 18px;
 `;

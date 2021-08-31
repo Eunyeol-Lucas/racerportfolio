@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from "react";
 import axios from "axios";
-import * as Register from './Cordinate';
+import * as Register from "./Cordinate";
 import styled from "styled-components";
+import Banner from "react-js-banner";
 //회원가입 page
 const RegisterPage = (props) => {
   const [id, setId] = useState("");
@@ -13,6 +14,8 @@ const RegisterPage = (props) => {
   const [passwordError, setPasswordError] = useState(false);
   const [username, setUsername] = useState("");
   const [usernameCheck, setUsernameCheck] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [fail, setFail] = useState(false);
 
   const { history } = props;
   // Custom Hook 이전
@@ -57,10 +60,12 @@ const RegisterPage = (props) => {
       ? setUsernameCheck(false)
       : setUsernameCheck(true);
   };
+  const onFail = () => {
+    setFail(true);
+    setTimeout(() => setFail(false), 2000);
+  };
   // 회원가입 버튼 누를 경우, 최종 확인
-  const onSubmit = (e) => {
-    e.preventDefault();
-    /**검증 로직 만들기
+  /**검증 로직 만들기
      1. 아이디가 이메일이 아닐 경우 return
      2. 비밀번호와 비밀번호 체크가 다를 경우 return
      3. 사용자 이름이 기준에 맞지 않을 경우 return
@@ -69,116 +74,150 @@ const RegisterPage = (props) => {
      6. 최종적으로 모든 유효성 검사를 통과할 경우 데이터 저장 -> 회원가입 완료
      7. 회원가입 완료 후 로그인 page로 이동
      */
-    if (!idCheck) return;
-
-    if (password !== passwordCheck) {
-      return setPasswordError(true);
+  const onSubmit = (e) => {
+    e.preventDefault();
+    if (!idCheck) {
+      onFail();
+      return;
     }
-    if (!usernameCheck) return;
+    if (!passwordVali) {
+      onFail();
+      return;
+    }
+    if (password !== passwordCheck) {
+      setPasswordError(true);
+      onFail();
+      return;
+    }
+    if (!usernameCheck) {
+      onFail();
+      return;
+    }
 
     const body = {
       username,
       id,
       password,
     };
-    console.log(body);
     axios.post(`http://localhost:5000/api/register`, body).then((res) => {
-      console.log(res);
       if (res.data.result === "fail") {
         setIdValidate(false);
       } else {
-        alert("회원 가입에 성공하셨습니다.");
-        history.push("/login");
+        setSuccess(true);
+        setTimeout(() => history.push("/login"), 2000);
       }
     });
-  }
+  };
 
   return (
-    <Register.Container large>
-      <form onSubmit={onSubmit}>
-        <Register.InputBlock>
-          <Register.Label htmlFor="id">ID</Register.Label>
-          <Register.Inputbox
-            name="id"
-            value={id}
-            required
-            onChange={onChangeId}
-            placeholder="ID"
-          />
-          {!idCheck && (
-            <WarningP style={{ color: "red" }}>
-              Email 형식으로 입력해주세요.
-            </WarningP>
-          )}
-          {!idValidate && (
-            <WarningP style={{ color: "red" }}>
-              중복된 아이디가 존재합니다.
-            </WarningP>
-          )}
-        </Register.InputBlock>
-        <Register.InputBlock>
-          <Register.Label htmlFor="password">PASSWORD</Register.Label>
-          <Register.Inputbox
-            name="password"
-            type="password"
-            value={password}
-            placeholder="PASSWORD"
-            required
-            onChange={onChangePassword}
-          />
-          {!passwordVali && (
-            <WarningP style={{ color: "red" }}>
-              영문, 숫자, 특수문자 조합 10자리 이상
-            </WarningP>
-          )}
-        </Register.InputBlock>
-        <Register.InputBlock>
-          <Register.Label htmlFor="password-check">
-            PASSWORD CHECK
-          </Register.Label>
-          <Register.Inputbox
-            name="password-check"
-            type="password"
-            value={passwordCheck}
-            placeholder="PASSWORD CHECK"
-            required
-            onChange={onChangePasswordChk}
-          />
-          {passwordError && (
-            <WarningP style={{ color: "red" }}>
-              비밀번호가 일치하지 않습니다.
-            </WarningP>
-          )}
-        </Register.InputBlock>
-        <Register.InputBlock>
-          <Register.Label htmlFor="username">NAME</Register.Label>
-          <Register.Inputbox
-            name="username"
-            value={username}
-            placeholder="YOUR NAME"
-            required
-            onChange={onChangeUsername}
-          />
-          {!usernameCheck && (
-            <WarningP style={{ color: "red" }}>
-              한글 또는 영문으로만 입력이 가능합니다.
-            </WarningP>
-          )}
-        </Register.InputBlock>
-        <div>
-          <p>
-            <Register.Button large type="submit">
-              회원가입
-            </Register.Button>
-          </p>
-        </div>
-      </form>
-    </Register.Container>
+    <>
+      <Register.InformContainer>
+        <Banner
+          showBanner={success}
+          css={{ backgroundColor: "#0080ff", fontSize: 22, color: "white" }}
+          title="회원가입에 성공하셨습니다."
+        />
+        <Banner
+          showBanner={fail}
+          css={{ backgroundColor: "#ff4d4d", fontSize: 22, color: "white" }}
+          title="양식에 알맞게 입력해주세요."
+        />
+      </Register.InformContainer>
+      <Register.Container large>
+        <form onSubmit={onSubmit}>
+          <Register.InputBlock>
+            <Register.Label htmlFor="id">ID</Register.Label>
+            <Register.Inputbox large
+              name="id"
+              value={id}
+              required
+              idCheck={idCheck}
+              idValidate={idValidate}
+              onChange={(e) => {
+                onChangeId(e);
+                setIdValidate(true);
+              }}
+              placeholder="ID"
+            />
+            {!idCheck && (
+              <WarningP style={{ color: "red" }}>
+                Email 형식으로 입력해주세요.
+              </WarningP>
+            )}
+            {!idValidate && (
+              <WarningP style={{ color: "red" }}>
+                중복된 아이디가 존재합니다.
+              </WarningP>
+            )}
+          </Register.InputBlock>
+          <Register.InputBlock>
+            <Register.Label htmlFor="password">PASSWORD</Register.Label>
+            <Register.Inputbox large 
+              name="password"
+              type="password"
+              value={password}
+              placeholder="PASSWORD"
+              required
+              onChange={onChangePassword}
+              passwordVali={passwordVali}
+            />
+            {!passwordVali && (
+              <WarningP style={{ color: "red" }}>
+                영문, 숫자, 특수문자 조합 10자리 이상
+              </WarningP>
+            )}
+          </Register.InputBlock>
+          <Register.InputBlock>
+            <Register.Label htmlFor="password-check">
+              PASSWORD CHECK
+            </Register.Label>
+            <Register.Inputbox large
+              name="password-check"
+              type="password"
+              value={passwordCheck}
+              placeholder="PASSWORD CHECK"
+              required
+              onChange={onChangePasswordChk}
+              passwordError={passwordError}
+            />
+            {passwordError && (
+              <WarningP style={{ color: "red" }}>
+                비밀번호가 일치하지 않습니다.
+              </WarningP>
+            )}
+          </Register.InputBlock>
+          <Register.InputBlock>
+            <Register.Label htmlFor="username">NAME</Register.Label>
+            <Register.Inputbox large
+              name="username"
+              value={username}
+              placeholder="YOUR NAME"
+              required
+              onChange={onChangeUsername}
+              usernameCheck={usernameCheck}
+            />
+            {!usernameCheck && (
+              <WarningP style={{ color: "red" }}>
+                한글 또는 영문으로만 입력이 가능합니다.
+              </WarningP>
+            )}
+          </Register.InputBlock>
+          <div>
+            <p>
+              <Register.Button large type="submit">
+                회원가입
+              </Register.Button>
+            </p>
+          </div>
+        </form>
+      </Register.Container>
+    </>
   );
 };
 
 export default RegisterPage;
 
 const WarningP = styled.p`
-  margin-bottom: 0;
-`
+  margin: 0;
+  padding: 0;
+`;
