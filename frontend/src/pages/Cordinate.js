@@ -30,9 +30,9 @@ export const Inputbox = styled.input`
   height: 40px;
   padding-left: 30px;
   font-size: 15px;
-  /* &:focus {
+  :focus {
     outline: none;
-  } */
+  }
   ${(props) => {
     if (props.idCheck === false) {
       return css`
