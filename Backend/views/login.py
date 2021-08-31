@@ -25,7 +25,8 @@ def login():
                     return jsonify(
                         result='success',
                         access_token = access_token,
-                        refresh_token = refresh_token
+                        refresh_token = refresh_token,
+                        username = user.username
                         )
                 except Exception as e:
                     abort(400,'예기치 못한 문제가 발생하였습니다.')
@@ -41,3 +42,14 @@ def login():
 def refresh():
     access_token = create_access_token(identity = get_jwt_identity(), fresh = False)
     return jsonify(access_token =access_token)
+
+@bp.route('/login/protect', methods = ['GET'])
+@jwt_required()
+def protect():
+    try:
+        return jsonify({"result": "success"})
+    
+    except Exception as e:
+        abort(401, {'error': str(e)})
+    
+    
